@@ -1,0 +1,81 @@
+# =========================
+# Python
+# =========================
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+
+# Virtual environments
+venv/
+.env/
+.env.*
+ENV/
+.venv/
+
+# =========================
+# Flask / Web
+# =========================
+instance/
+.webassets-cache/
+flask_session/
+
+# =========================
+# Logs & runtime data
+# =========================
+*.log
+logs/
+audit/
+metrics/
+failure_proof/
+
+# =========================
+# OS / Editor junk
+# =========================
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+
+# =========================
+# Test / temp / reports
+# =========================
+dashboard/
+visualizer/
+reports/
+output/
+tmp/
+
+# =========================
+# Secrets / keys
+# =========================
+*.key
+*.pem
+*.crt
+*.csr
+*.der
+*.pfx
+*.keystore
+secrets/
+keys/
+
+# =========================
+# Build / cache
+# =========================
+build/
+dist/
+*.egg-info/
+
+# =========================
+# Node (if any frontend tooling)
+# =========================
+node_modules/
+npm-debug.log*
+yarn-error.log*
+
+# =========================
+# Jupyter (if used)
+# =========================
+.ipynb_checkpoints/

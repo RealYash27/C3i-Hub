@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QuantumShield · Post-Quantum Security Platform</title>
+
+    <!-- Premium Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@500;600;700&display=swap"
+        rel="stylesheet">
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="/static/dashboard.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+    <div class="dashboard-container">
+        <!-- Header -->
+        <header class="dashboard-header">
+            <div class="header-left">
+                <h1><i class="fas fa-shield-halved"></i> QuantumShield</h1>
+                <span class="version">v1.0</span>
+            </div>
+            <div class="header-right">
+                <div class="connection-status" id="connectionStatus">
+                    <i class="fas fa-circle"></i>
+                    <span>Connecting...</span>
+                </div>
+                <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()" title="Toggle theme">
+                    <i class="fas fa-moon" id="themeIcon"></i>
+                </button>
+                <button class="btn btn-primary" onclick="runAllTests()">
+                    <i class="fas fa-play"></i> Run All Tests
+                </button>
+            </div>
+        </header>
+
+        <div class="dashboard-content">
+            <!-- Modern Sidebar -->
+            <aside class="sidebar">
+                <nav class="sidebar-nav">
+                    <a href="#tests" class="nav-item active" data-view="tests">
+                        <i class="fas fa-flask"></i>
+                        <span>Test Cases</span>
+                    </a>
+                    <a href="#monitor" class="nav-item" data-view="monitor">
+                        <i class="fas fa-chart-line"></i>
+                        <span>Monitor</span>
+                    </a>
+                    <a href="#results" class="nav-item" data-view="results">
+                        <i class="fas fa-clipboard-check"></i>
+                        <span>Results</span>
+                    </a>
+                    <a href="#logs" class="nav-item" data-view="logs">
+                        <i class="fas fa-terminal"></i>
+                        <span>Live Logs</span>
+                    </a>
+                </nav>
+
+                <!-- Stats Widget -->
+                <div class="test-summary">
+                    <h3>Test Overview</h3>
+                    <div class="summary-stats">
+                        <div class="stat">
+                            <span class="stat-value" id="totalTests">0</span>
+                            <span class="stat-label">Total</span>
+                        </div>
+                        <div class="stat stat-success">
+                            <span class="stat-value" id="passedTests">0</span>
+                            <span class="stat-label">Passed</span>
+                        </div>
+                        <div class="stat stat-danger">
+                            <span class="stat-value" id="failedTests">0</span>
+                            <span class="stat-label">Failed</span>
+                        </div>
+                        <div class="stat stat-warning">
+                            <span class="stat-value" id="runningTests">0</span>
+                            <span class="stat-label">Active</span>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- Main Content -->
+            <main class="main-content">
+                <!-- Test Cases View -->
+                <div id="testsView" class="view active">
+                    <div class="view-header">
+                        <h2>Test Cases</h2>
+                        <div class="view-actions">
+                            <div class="filter-group">
+                                <label>Filter:</label>
+                                <select id="testTypeFilter" onchange="filterTests()">
+                                    <option value="all">All Types</option>
+                                    <option value="protocol">Protocol</option>
+                                    <option value="security">Security</option>
+                                    <option value="performance">Performance</option>
+                                    <option value="failure">Failure</option>
+                                </select>
+                            </div>
+                            <button class="btn btn-secondary" onclick="showCreateTestModal()">
+                                <i class="fas fa-plus"></i> New Test
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Test Grid -->
+                    <div class="test-grid" id="testGrid">
+                        <!-- Dynamic content -->
+                    </div>
+                </div>
+
+                <!-- System Monitor View -->
+                <div id="monitorView" class="view">
+                    <div class="view-header">
+                        <h2>System Monitor</h2>
+                        <div class="view-actions">
+                            <span class="last-update">Updated: <span id="lastUpdate">-</span></span>
+                        </div>
+                    </div>
+
+                    <!-- Metrics Grid -->
+                    <div class="metrics-grid">
+                        <!-- Server Status -->
+                        <div class="metric-card">
+                            <div class="metric-header">
+                                <h3><i class="fas fa-server"></i> Server</h3>
+                                <span class="status-badge passed" id="serverStatus">Online</span>
+                            </div>
+                            <div class="metric-body">
+                                <div class="metric-item">
+                                    <span class="label">Uptime</span>
+                                    <span class="value" id="serverUptime">-</span>
+                                </div>
+                                <div class="metric-item">
+                                    <span class="label">Sessions</span>
+                                    <span class="value" id="activeSessions">0</span>
+                                </div>
+                                <div class="metric-item">
+                                    <span class="label">Handshakes</span>
+                                    <span class="value" id="totalHandshakes">0</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Performance -->
+                        <div class="metric-card">
+                            <div class="metric-header">
+                                <h3><i class="fas fa-gauge-high"></i> Performance</h3>
+                            </div>
+                            <div class="metric-body">
+                                <div class="metric-item">
+                                    <span class="label">Rate</span>
+                                    <span class="value" id="handshakesPerSec">0/s</span>
+                                </div>
+                                <div class="metric-item">
+                                    <span class="label">Latency</span>
+                                    <span class="value" id="avgLatency">0 ms</span>
+                                </div>
+                                <div class="metric-item">
+                                    <span class="label">Throughput</span>
+                                    <span class="value" id="throughput">0 KB/s</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Statistics -->
+                        <div class="metric-card">
+                            <div class="metric-header">
+                                <h3><i class="fas fa-chart-bar"></i> Statistics</h3>
+                            </div>
+                            <div class="metric-body">
+                                <div class="metric-item">
+                                    <span class="label">Total</span>
+                                    <span class="value" id="totalTestsRun">0</span>
+                                </div>
+                                <div class="metric-item">
+                                    <span class="label">Success</span>
+                                    <span class="value" id="successfulTests">0</span>
+                                </div>
+                                <div class="metric-item">
+                                    <span class="label">Failed</span>
+                                    <span class="value" id="failedTestsCount">0</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        
+                    </div>
+
+                    <!-- Charts -->
+                    <div class="charts-grid">
+                        <div class="chart-card">
+                            <h3>Throughput Over Time</h3>
+                            <canvas id="throughputChart"></canvas>
+                        </div>
+                        <div class="chart-card">
+                            <h3>Latency Distribution</h3>
+                            <canvas id="latencyChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Results View -->
+                <div id="resultsView" class="view">
+                    <div class="view-header">
+                        <h2>Results</h2>
+                    </div>
+                    <div id="resultsContent" class="results-content">
+                        <!-- Dynamic content -->
+                    </div>
+                </div>
+
+                <!-- Logs View -->
+                <div id="logsView" class="view">
+                    <div class="view-header">
+                        <h2>Live Logs</h2>
+                        <div class="view-actions">
+                            <button class="btn btn-secondary" onclick="clearLogs()">
+                                <i class="fas fa-trash-alt"></i> Clear
+                            </button>
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="autoScroll" checked>
+                                Auto-scroll
+                            </label>
+                        </div>
+                    </div>
+                    <div class="logs-container" id="logsContainer">
+                        <!-- Dynamic logs -->
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Test Detail Modal -->
+    <div id="testDetailModal" class="modal">
+        <div class="modal-content large">
+            <div class="modal-header">
+                <h2 id="testDetailTitle">Test Details</h2>
+                <button class="modal-close" onclick="closeTestDetailModal()">&times;</button>
+            </div>
+            <div class="modal-body" id="testDetailBody">
+                <!-- Dynamic content -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Create Test Modal -->
+    <div id="createTestModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Create Test</h2>
+                <button class="modal-close" onclick="closeCreateTestModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="createTestForm" onsubmit="createTest(event)">
+                    <div class="form-group">
+                        <label>Test Name</label>
+                        <input type="text" name="name" required placeholder="Enter test name">
+                    </div>
+                    <div class="form-group">
+                        <label>Test Type</label>
+                        <select name="type" required>
+                            <option value="protocol">Protocol Flow</option>
+                            <option value="security">Security Validation</option>
+                            <option value="performance">Performance Test</option>
+                            <option value="failure">Failure Injection</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Description</label>
+                        <textarea name="description" rows="3" placeholder="Describe this test"></textarea>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>KEM Algorithm</label>
+                            <select name="kemAlgorithm">
+                                <option value="Kyber512">Kyber512</option>
+                                <option value="Kyber768" selected>Kyber768</option>
+                                <option value="Kyber1024">Kyber1024</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Signature Algorithm</label>
+                            <select name="signatureAlgorithm">
+                                <option value="Dilithium2">Dilithium2</option>
+                                <option value="Dilithium3" selected>Dilithium3</option>
+                                <option value="Dilithium5">Dilithium5</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Failure Mode</label>
+                        <select name="failureMode">
+                            <option value="none">None</option>
+                            <option value="invalid_signature">Invalid Signature</option>
+                            <option value="corrupt_ciphertext">Corrupt Ciphertext</option>
+                            <option value="timeout">Timeout</option>
+                            <option value="wrong_keys">Wrong Keys</option>
+                        </select>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary" onclick="closeCreateTestModal()">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Create</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div id="toastContainer" class="toast-container"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="/static/dashboard.js"></script>
+</body>
+
+</html>

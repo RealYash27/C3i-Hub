@@ -1,0 +1,7 @@
+{
+  "kem": "Kyber768",
+  "signature": "Dilithium3",
+  "hash": "SHAKE256",
+  "version": 1,
+  "description": "Post-Quantum Crypto Policy for KEMTLS-based OIDC"
+}
