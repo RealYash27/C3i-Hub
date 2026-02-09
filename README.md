@@ -21,6 +21,13 @@ QuantumShield is a production-grade testing and monitoring platform for KEMTLS (
 ### Prerequisites
 
 ```bash
+python3 -m venv venv
+
+source venv/bin/activate
+
+
+cd web_demo
+pip install -r requirements.txt
 pip install flask flask-sock liboqs cryptography pyjwt
 ```
 
@@ -39,19 +46,6 @@ The dashboard launches directly with:
 - Live event streaming via WebSocket
 - Dark/light theme support
 
-### Run KEMTLS Demo
-
-**Terminal 1 - Start KEMTLS Server:**
-```bash
-cd all_obj
-python kemtls_server_tcp.py
-```
-
-**Terminal 2 - Run KEMTLS Client:**
-```bash
-cd all_obj
-python kemtls_client_tcp.py
-```
 
 Expected output:
 - KEMTLS handshake completion
@@ -64,36 +58,83 @@ Expected output:
 ## Project Structure
 
 ```
-all_obj/
+QuantumShield/
 │
-├── CORE KEMTLS IMPLEMENTATION
-│   ├── kemtls_server_tcp.py          - KEMTLS server (raw TCP)
-│   ├── kemtls_client_tcp.py          - KEMTLS client (raw TCP)
-│   └── kemtls/
-│       ├── handshake.py               - Protocol implementation
-│       └── channel.py                 - Encrypted channel
+├── README.md  
+│   - Project overview, setup instructions,architecture summary,
+│     and demo execution steps.
 │
-├── WEB DASHBOARD
-│   └── web_demo/
-│       ├── app_enhanced.py            - Main Flask application
-│       ├── templates/
-│       │   └── dashboard.html         - Dashboard interface
-│       └── static/
-│           ├── dashboard.css          - Production-grade UI styles
-│           └── dashboard.js           - Frontend logic
+├── auth_server/
+│   ├── auth_server.py  
+│   │   - Core OpenID Connect authorization server logic.
+│   │   - Handles /authorize and /token endpoints.
+│   │   - Integrates KEMTLS-secured transport layer.
+│   │
+│   ├── jwks.py  
+│   │   - Post-quantum public key distribution (JWKS).
+│   │   - Exposes Dilithium public key for token verification.
+│   │
+│   ├── kemtls_server.py  
+│   │   - Bridges OIDC application layer with KEMTLS transport.
+│   │   - Ensures secure session establishment.
+│   │
+│   └── token_service.py  
+│       - Generates and signs ID Tokens using Dilithium3.
+│       - Maintains JWT structure compliance with OIDC.
 │
-├── SUPPORTING MODULES
-│   ├── auth_server/
-│   │   └── token_service.py           - JWT/OIDC token generation
-│   └── crypto/
-│       └── symmetric.py               - Cryptographic utilities
+├── crypto/
+│   └── symmetric.py  
+│       - Symmetric encryption utilities (AES-based).
+│       - Used after KEM-derived shared secret establishment.
 │
-└── DOCUMENTATION
-    ├── README.md                      - This file
-    ├── TechnicalDocumentation.md      - Research-grade technical docs
-    ├── BenchmarkResults.md            - Performance analysis
-    └── KEMTLS_IMPLEMENTATION_GUIDE.md - Implementation details
-```
+├── kemtls/
+│   ├── channel.py  
+│   │   - Secure encrypted communication channel abstraction.
+│   │   - Wraps symmetric encryption over shared secret.
+│   │
+│   ├── handshake.py  
+│   │   - Implements post-quantum KEMTLS handshake protocol.
+│   │   - Handles key encapsulation/decapsulation flow.
+│   │
+│   ├── kemtls_client.py  
+│   │   - Client-side KEMTLS session initiation logic.
+│   │   - Establishes secure channel with server.
+│   │
+│   └── kemtls_server.py  
+│       - Server-side KEMTLS handshake handler.
+│       - Processes encapsulated key material and derives session key.
+│
+├── policy/
+│   ├── crypto_policy.json  
+│   │   - Runtime cryptographic configuration file.
+│   │   - Defines active KEM, signature, and hash algorithms.
+│   │
+│   └── policy_loader.py  
+│       - Loads and validates active cryptographic policy.
+│       - Enables crypto agility without modifying core logic.
+│
+└── web_demo/
+    ├── app_enhanced.py   
+    │   - Serves dashboard UI and exposes API endpoints.
+    │   - Integrates live metrics and security state.
+    │
+    ├── requirements.txt  
+    │   - Python dependencies for web dashboard module.
+    │
+    ├── static/
+    │   ├── dashboard.css  
+    │   │   - Production-grade dashboard styling.
+    │   │   - Enterprise UI design.
+    │   │
+    │   └── dashboard.js  
+    │       - Frontend logic.
+    │       - Fetches metrics and security data from backend APIs.
+    │
+    └── templates/
+        └── dashboard.html  
+            - Main dashboard interface.
+            - Displays cryptographic posture and system metrics.
+
 
 ---
 
@@ -184,9 +225,9 @@ Client                          Server
   |--------- CLIENT_KEM --------->|
   |    (ciphertext)               |
   |                               |
-  |                Decapsulate    |
-  |                ss = KEM.Decap(ct)
-  |                Sign transcript|
+  |  Decapsulate                  |
+  |  ss = KEM.Decap(ct)           |
+  |  Sign transcript              |
   |                               |
   |<-------- SERVER_AUTH ---------|
   |    (signature)                |
