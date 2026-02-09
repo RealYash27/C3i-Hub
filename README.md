@@ -34,7 +34,7 @@ pip install flask flask-sock liboqs cryptography pyjwt
 ### Run the Dashboard
 
 ```bash
-cd all_obj/web_demo
+cd QuantumShield/web_demo
 python app_enhanced.py
 ```
 
