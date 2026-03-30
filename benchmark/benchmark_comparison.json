@@ -1,0 +1,209 @@
+{
+  "disclaimer": "All measurements are CPU-only, no network. Direct numeric comparison to literature is not meaningful without matching hardware and network.",
+  "handshake": {
+    "tls": {
+      "mean": 1.3773,
+      "median": 1.241,
+      "stdev": 0.5204,
+      "min": 0.844,
+      "max": 7.535
+    },
+    "kemtls": {
+      "mean": 1.0801,
+      "median": 0.9459,
+      "stdev": 0.4555,
+      "min": 0.5077,
+      "max": 4.2522
+    },
+    "kemtls_advantage_ms": 0.2972,
+    "kemtls_faster_pct": 21.58
+  },
+  "token_generation": {
+    "rsa_2048": {
+      "mean": 0.6122,
+      "median": 0.5176,
+      "stdev": 0.285,
+      "min": 0.2996,
+      "max": 2.3487
+    },
+    "ml_dsa_65": {
+      "mean": 0.7596,
+      "median": 0.6096,
+      "stdev": 0.5045,
+      "min": 0.2147,
+      "max": 5.6012
+    }
+  },
+  "token_verification": {
+    "rsa_2048": {
+      "mean": 0.097,
+      "median": 0.0831,
+      "stdev": 0.053,
+      "min": 0.0576,
+      "max": 0.7021
+    },
+    "ml_dsa_65": {
+      "mean": 0.2136,
+      "median": 0.2007,
+      "stdev": 0.0646,
+      "min": 0.1408,
+      "max": 0.5692
+    }
+  },
+  "userinfo_latency": {
+    "warning": "ENVIRONMENT: CPU-only, no network.",
+    "tls": {
+      "mean": 0.098,
+      "median": 0.0818,
+      "stdev": 0.0617,
+      "min": 0.0591,
+      "max": 0.8348
+    },
+    "kemtls": {
+      "mean": 0.2169,
+      "median": 0.1983,
+      "stdev": 0.081,
+      "min": 0.1447,
+      "max": 0.9316
+    }
+  },
+  "auth_latency": {
+    "warning": "ENVIRONMENT: CPU-only, no network. Direct numeric comparison to literature is not meaningful without matching hardware and network.",
+    "tls": {
+      "mean": 2.2939,
+      "median": 2.0243,
+      "stdev": 2.2868,
+      "min": 1.2165,
+      "max": 59.632
+    },
+    "kemtls": {
+      "mean": 2.1865,
+      "median": 1.9779,
+      "stdev": 0.9781,
+      "min": 0.9677,
+      "max": 15.5152
+    },
+    "kemtls_advantage_ms": 0.1074,
+    "kemtls_faster_pct": 4.7,
+    "literature_reference": {
+      "source": "Schardong et al., 'Post-Quantum OpenID Connect', IEEE/ACM Symp. on Security and Privacy (S&P), 2023.",
+      "environment": "Raspberry Pi 4 (1.5 GHz ARM Cortex-A72), LAN, liboqs with Kyber768 + Dilithium3, Ubuntu 20.04",
+      "literature_pq_tls_full_auth_latency_ms": 12.4,
+      "literature_classical_tls_full_auth_latency_ms": 0.8,
+      "note": "LITERATURE VALUES ONLY \u2014 not measured in this environment. Reported as reference for context per evaluation guidelines. Our measurements above are on x86-64 in-process (no network). Direct numeric comparison is not meaningful without matching hardware.",
+      "warning": "Do not compare these numbers directly with our measured values above."
+    }
+  },
+  "key_sizes": {
+    "tls": {
+      "rsa_public_key": 294,
+      "ecdhe_share": 65,
+      "rsa_signature": 256,
+      "certificate": 782,
+      "token_signature": 256
+    },
+    "kemtls": {
+      "kem_public_key": 1184,
+      "kem_ciphertext": 1088,
+      "sig_public_key": 1952,
+      "sig_signature": 3309,
+      "token_signature": 3309
+    }
+  },
+  "message_sizes": {
+    "handshake_sizes": {
+      "kemtls_server_hello_bytes": 3136,
+      "kemtls_client_kem_bytes": 1088,
+      "kemtls_server_auth_bytes": 3309,
+      "kemtls_client_finished_bytes": 64,
+      "kemtls_total_handshake_bytes": 7597,
+      "tls13_server_hello_bytes": 1312,
+      "tls13_client_finished_bytes": 64,
+      "tls13_total_handshake_bytes": 1376
+    },
+    "oidc_payload_sizes": {
+      "authorize_request_bytes": 277,
+      "authorize_response_bytes": 179,
+      "token_request_bytes": 147,
+      "tls_token_response_bytes": 1275,
+      "kemtls_token_response_bytes": 9723,
+      "userinfo_response_bytes": 137
+    },
+    "note": "Token responses use RSA-2048 JWT (TLS) and ML-DSA-65 JWT (KEMTLS)"
+  },
+  "network_model": {
+    "methodology": "Network projection model. Base crypto latency from in-process measurements. Propagation = RTT * message_round_trips. Transmission = bytes / (100 Mbps). Matches Schardong et al. 2023 network overhead analysis approach.",
+    "link_assumption": "100 Mbps LAN",
+    "kemtls_handshake_bytes": 7533,
+    "tls13_handshake_bytes": 1376,
+    "rtt_table": [
+      {
+        "rtt_ms": 0,
+        "kemtls_projected_ms": 3.17,
+        "tls_projected_ms": 3.36,
+        "kemtls_overhead_pct": -5.6,
+        "kemtls_faster": true
+      },
+      {
+        "rtt_ms": 5,
+        "kemtls_projected_ms": 13.17,
+        "tls_projected_ms": 13.36,
+        "kemtls_overhead_pct": -1.4,
+        "kemtls_faster": true
+      },
+      {
+        "rtt_ms": 10,
+        "kemtls_projected_ms": 23.17,
+        "tls_projected_ms": 23.36,
+        "kemtls_overhead_pct": -0.8,
+        "kemtls_faster": true
+      },
+      {
+        "rtt_ms": 25,
+        "kemtls_projected_ms": 53.17,
+        "tls_projected_ms": 53.36,
+        "kemtls_overhead_pct": -0.4,
+        "kemtls_faster": true
+      },
+      {
+        "rtt_ms": 50,
+        "kemtls_projected_ms": 103.17,
+        "tls_projected_ms": 103.36,
+        "kemtls_overhead_pct": -0.2,
+        "kemtls_faster": true
+      },
+      {
+        "rtt_ms": 100,
+        "kemtls_projected_ms": 203.17,
+        "tls_projected_ms": 203.36,
+        "kemtls_overhead_pct": -0.1,
+        "kemtls_faster": true
+      }
+    ],
+    "breakeven_rtt_ms": null,
+    "note": "KEMTLS is faster than TLS at RTT < Nonems (CPU-bound regime). At higher RTTs, larger PQ message sizes add proportionally more bandwidth overhead, eventually making KEMTLS slower in a network-limited regime."
+  },
+  "iterations": 1000,
+  "security_comparison": {
+    "tls": {
+      "quantum_safe": false,
+      "algorithms": [
+        "RSA-2048",
+        "ECDHE-P256",
+        "SHA-256",
+        "AES-256-GCM"
+      ],
+      "nist_level": "N/A (classical)"
+    },
+    "kemtls": {
+      "quantum_safe": true,
+      "algorithms": [
+        "ML-KEM-768",
+        "ML-DSA-65",
+        "SHA3-256",
+        "AES-256-GCM"
+      ],
+      "nist_level": "Level 3"
+    }
+  }
+}

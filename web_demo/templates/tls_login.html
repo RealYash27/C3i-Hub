@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login · Classical TLS (Quantum Vulnerable)</title>
+    <meta name="description" content="Classical TLS authentication demo RSA-2048 + ECDHE-P256">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="/static/tls_login.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+    <script>
+        (function(){
+            var t=localStorage.getItem('quantumshield-theme')||'light';
+            document.documentElement.setAttribute('data-theme',t);
+        })();
+    </script>
+    <!-- Particle network background -->
+    <canvas id="particleCanvas" data-accent="tls"></canvas>
+    <div class="login-page">
+        <!-- LEFT PANEL Login Form -->
+        <div class="login-left">
+            <!-- Theme toggle -->
+            <button class="tls-theme-toggle" id="themeToggle" onclick="toggleTLSTheme()" title="Toggle theme">
+                <i class="fas fa-moon" id="themeIcon"></i>
+            </button>
+            <a href="/" class="back-link"><i class="fas fa-arrow-left"></i> Back to mode selection</a>
+
+            <div class="login-header">
+                <div class="login-brand">
+                    <i class="fas fa-lock"></i>
+                    <h1>Classical TLS</h1>
+                    <span class="version">Classical TLS</span>
+                </div>
+                <p class="login-subtitle">Traditional TLS 1.2 Authentication</p>
+            </div>
+
+            <div class="protocol-badge">
+                <i class="fas fa-shield"></i>
+                RSA-2048 · ECDHE-P256 · SHA-256
+            </div>
+
+            <form class="login-form" id="loginForm" onsubmit="handleTLSLogin(event)">
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" name="username" placeholder="Enter your username"
+                        autocomplete="username" required value="admin">
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" placeholder="Enter your password"
+                        autocomplete="current-password" required value="quantum123">
+                </div>
+
+                <div class="login-error" id="loginError">
+                    <i class="fas fa-exclamation-circle"></i>
+                    <span id="errorText">Invalid credentials</span>
+                </div>
+
+                <button type="submit" class="login-btn" id="loginBtn">
+                    <span class="btn-text">
+                        <i class="fas fa-right-to-bracket"></i> Sign In via TLS
+                    </span>
+                    <div class="spinner"></div>
+                </button>
+            </form>
+
+            <div class="login-footer">
+                <div class="crypto-info">
+                    <div class="crypto-chip accent"><i class="fas fa-circle"></i> RSA-2048</div>
+                    <div class="crypto-chip accent"><i class="fas fa-circle"></i> ECDHE-P256</div>
+                    <div class="crypto-chip accent"><i class="fas fa-circle"></i> SHA-256</div>
+                    <div class="crypto-chip"><i class="fas fa-circle"></i> AES-256-GCM</div>
+                </div>
+                <div class="info-banner">
+                    <i class="fas fa-info-circle"></i>
+                    <span>Classical cryptography — quantum-era upgrade path available</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- RIGHT PANEL TLS Flow Visualization -->
+        <div class="login-right">
+            <div class="flow-header">
+                <h2><i class="fas fa-diagram-project"></i> Classical TLS 1.2 Handshake</h2>
+                <p>Watch the traditional authentication process</p>
+            </div>
+
+            <!-- Idle state -->
+            <div class="flow-idle" id="flowIdle">
+                <div class="flow-idle-content">
+                    <div class="flow-idle-icon"><i class="fas fa-lock"></i></div>
+                    <h3>Ready for Authentication</h3>
+                    <p>Click <strong>Sign In</strong> to start the classical TLS handshake and observe the RSA + ECDHE
+                        key exchange flow.</p>
+                </div>
+            </div>
+
+            <!-- Flow steps -->
+            <div class="flow-steps" id="flowSteps">
+                <div class="flow-step" id="step-1" data-step="1">
+                    <div class="step-icon"><i class="fas fa-laptop"></i></div>
+                    <div class="step-body">
+                        <div class="step-name">TLS: ClientHello <span class="step-direction">client → server</span>
+                        </div>
+                        <div class="step-desc">Client proposes cipher suites, sends random nonce</div>
+                        <div class="step-timing" id="timing-1"></div>
+                        <div class="step-detail" id="detail-1"></div>
+                    </div>
+                </div>
+
+                <div class="flow-step" id="step-2" data-step="2">
+                    <div class="step-icon"><i class="fas fa-server"></i></div>
+                    <div class="step-body">
+                        <div class="step-name">TLS: ServerHello <span class="step-direction">server → client</span>
+                        </div>
+                        <div class="step-desc">Server selects cipher suite, generates RSA-2048 keypair</div>
+                        <div class="step-timing" id="timing-2"></div>
+                        <div class="step-detail" id="detail-2"></div>
+                    </div>
+                </div>
+
+                <div class="flow-step" id="step-3" data-step="3">
+                    <div class="step-icon"><i class="fas fa-certificate"></i></div>
+                    <div class="step-body">
+                        <div class="step-name">TLS: Certificate <span class="step-direction">server → client</span>
+                        </div>
+                        <div class="step-desc">Server sends X.509 certificate chain</div>
+                        <div class="step-timing" id="timing-3"></div>
+                        <div class="step-detail" id="detail-3"></div>
+                    </div>
+                </div>
+
+                <div class="flow-step" id="step-4" data-step="4">
+                    <div class="step-icon"><i class="fas fa-right-left"></i></div>
+                    <div class="step-body">
+                        <div class="step-name">TLS: ECDHE Key Exchange <span class="step-direction">bidirectional</span>
+                        </div>
+                        <div class="step-desc">ECDHE-P256 ephemeral key agreement + RSA-PSS signature</div>
+                        <div class="step-timing" id="timing-4"></div>
+                        <div class="step-detail" id="detail-4"></div>
+                    </div>
+                </div>
+
+                <div class="flow-step" id="step-5" data-step="5">
+                    <div class="step-icon"><i class="fas fa-key"></i></div>
+                    <div class="step-body">
+                        <div class="step-name">TLS: Key Derivation <span class="step-direction">both</span></div>
+                        <div class="step-desc">HKDF-SHA256 → AES-256-GCM session key</div>
+                        <div class="step-timing" id="timing-5"></div>
+                        <div class="step-detail" id="detail-5"></div>
+                    </div>
+                </div>
+
+                <div class="flow-step" id="step-6" data-step="6">
+                    <div class="step-icon"><i class="fas fa-check-circle"></i></div>
+                    <div class="step-body">
+                        <div class="step-name">TLS: Finished <span class="step-direction">both</span></div>
+                        <div class="step-desc">Channel verification and handshake complete</div>
+                        <div class="step-timing" id="timing-6"></div>
+                        <div class="step-detail" id="detail-6"></div>
+                    </div>
+                </div>
+
+                <div class="flow-step" id="step-7" data-step="7">
+                    <div class="step-icon"><i class="fas fa-id-card"></i></div>
+                    <div class="step-body">
+                        <div class="step-name">OIDC: Authorization + Token <span class="step-direction">server</span>
+                        </div>
+                        <div class="step-desc">RSA-2048-PSS signed JWT issued</div>
+                        <div class="step-timing" id="timing-7"></div>
+                        <div class="step-detail" id="detail-7"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Summary card -->
+            <div class="flow-summary" id="flowSummary">
+                <div class="flow-summary-header">
+                    <i class="fas fa-circle-check"></i>
+                    <h3>Authentication Complete (Classical TLS)</h3>
+                </div>
+                <div class="summary-grid" id="summaryGrid"></div>
+                <div class="compare-cta">
+                    <a href="/kemtls-login" class="compare-btn">
+                        <i class="fas fa-shield-halved"></i> Login with KEMTLS
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/static/particles.js"></script>
+    <script src="/static/tls_login.js"></script>
+    <script>
+        function toggleTLSTheme() {
+            var current = document.documentElement.getAttribute('data-theme');
+            var next = current === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', next);
+            localStorage.setItem('quantumshield-theme', next);
+            var icon = document.getElementById('themeIcon');
+            if (icon) icon.className = next === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+        }
+        // Sync icon on load
+        (function(){
+            var t = document.documentElement.getAttribute('data-theme');
+            var icon = document.getElementById('themeIcon');
+            if (icon) icon.className = t === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+        })();
+    </script>
+</body>
+
+</html>

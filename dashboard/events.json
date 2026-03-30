@@ -1,0 +1,559 @@
+[
+  {
+    "time": "2026-02-08T15:10:01Z",
+    "category": "Transport",
+    "event": "KEMTLS handshake completed",
+    "result": "PASS"
+  },
+  {
+    "time": "2026-02-08T15:12:44Z",
+    "category": "Signature",
+    "event": "JWT tampering detected",
+    "result": "FAIL"
+  },
+  {
+    "time": "2026-02-08T15:14:10Z",
+    "category": "Key Management",
+    "event": "JWKS mismatch detected",
+    "result": "FAIL"
+  },
+  {
+    "time": "2026-03-03T18:11:29.427261Z",
+    "category": "Transport",
+    "event": "KEMTLS handshake completed (Kyber768 + Dilithium3)",
+    "result": "PASS",
+    "severity": "INFO"
+  },
+  {
+    "time": "2026-03-03T18:11:29.476344Z",
+    "category": "Authentication",
+    "event": "User 'admin' authenticated",
+    "result": "PASS",
+    "severity": "INFO"
+  },
+  {
+    "time": "2026-03-03T18:11:29.577659Z",
+    "category": "Authorization",
+    "event": "Authorization code issued for 'admin'",
+    "result": "PASS",
+    "severity": "INFO"
+  },
+  {
+    "time": "2026-03-03T18:11:37.182743Z",
+    "category": "Token",
+    "event": "ID Token + Access Token issued for 'admin' (Dilithium3)",
+    "result": "PASS",
+    "severity": "INFO"
+  },
+  {
+    "time": "2026-03-03T18:12:09.790987Z",
+    "category": "Transport",
+    "event": "KEMTLS handshake completed (Kyber768 + Dilithium3)",
+    "result": "PASS",
+    "severity": "INFO"
+  },
+  {
+    "time": "2026-03-03T18:12:09.945040Z",
+    "category": "Authentication",
+    "event": "User 'admin' authenticated",
+    "result": "PASS",
+    "severity": "INFO"
+  },
+  {
+    "time": "2026-03-03T18:12:10.080058Z",
+    "category": "Authorization",
+    "event": "Authorization code issued for 'admin'",
+    "result": "PASS",
+    "severity": "INFO"
+  },
+  {
+    "time": "2026-03-03T18:12:27.632970Z",
+    "category": "Transport",
+    "event": "KEMTLS handshake completed (Kyber768 + Dilithium3)",
+    "result": "PASS",
+    "severity": "INFO"
+  },
+  {
+    "time": "2026-03-03T18:12:27.652463Z",
+    "category": "Authentication",
+    "event": "User 'admin' authenticated",
+    "result": "PASS",
+    "severity": "INFO"
+  },
+  {
+    "time": "2026-03-03T18:12:27.677519Z",
+    "category": "Authorization",
+    "event": "Authorization code issued for 'admin'",
+    "result": "PASS",
+    "severity": "INFO"
+  },
+  {
+    "time": "2026-03-03T18:12:35.013519Z",
+    "category": "Token",
+    "event": "ID Token + Access Token issued for 'admin' (Dilithium3)",
+    "result": "PASS",
+    "severity": "INFO"
+  },
+  {
+    "time": "2026-03-03T18:13:19.779449Z",
+    "category": "Transport",
+    "event": "KEMTLS handshake completed (Kyber768 + Dilithium3)",
+    "result": "PASS",
+    "severity": "INFO"
+  },
+  {
+    "time": "2026-03-03T18:13:19.810306Z",
+    "category": "Authentication",
+    "event": "User 'admin' authenticated",
+    "result": "PASS",
+    "severity": "INFO"
+  },
+  {
+    "time": "2026-03-03T18:13:20.059143Z",
+    "category": "Authorization",
+    "event": "Authorization code issued for 'admin'",
+    "result": "PASS",
+    "severity": "INFO"
+  },
+  {
+    "time": "2026-03-03T18:13:27.047908Z",
+    "category": "Token",
+    "event": "ID Token + Access Token issued for 'admin' (Dilithium3)",
+    "result": "PASS",
+    "severity": "INFO"
+  },
+  {
+    "time": "2026-03-03T18:16:34.346931Z",
+    "category": "Transport",
+    "event": "KEMTLS handshake completed (Kyber768 + Dilithium3)",
+    "result": "PASS",
+    "severity": "INFO"
+  },
+  {
+    "time": "2026-03-03T18:16:34.366199Z",
+    "category": "Authentication",
+    "event": "User 'admin' authenticated",
+    "result": "PASS",
+    "severity": "INFO"
+  },
+  {
+    "time": "2026-03-03T18:16:34.384898Z",
+    "category": "Authorization",
+    "event": "Authorization code issued for 'admin'",
+    "result": "PASS",
+    "severity": "INFO"
+  },
+  {
+    "time": "2026-03-03T18:16:41.650457Z",
+    "category": "Token",
+    "event": "ID Token + Access Token issued for 'admin' (Dilithium3)",
+    "result": "PASS",
+    "severity": "INFO"
+  },
+  {
+    "time": "2026-03-08T08:20:19.469341Z",
+    "category": "Transport",
+    "event": "KEMTLS handshake completed \u2014 encrypted OIDC channel established",
+    "result": "PASS",
+    "severity": "INFO"
+  },
+  {
+    "time": "2026-03-08T08:20:25.356907Z",
+    "category": "Authentication",
+    "event": "User 'admin' authenticated (KEMTLS encrypted channel)",
+    "result": "PASS",
+    "severity": "INFO"
+  },
+  {
+    "time": "2026-03-08T08:20:25.376062Z",
+    "category": "Authorization",
+    "event": "Auth code issued for 'admin' (KEMTLS channel)",
+    "result": "PASS",
+    "severity": "INFO"
+  },
+  {
+    "time": "2026-03-08T08:20:27.026698Z",
+    "category": "Token",
+    "event": "Tokens issued for 'admin' (KEMTLS channel, ML-DSA-65 signed)",
+    "result": "PASS",
+    "severity": "INFO"
+  },
+  {
+    "time": "2026-03-08T08:20:56.926228Z",
+    "category": "Benchmark",
+    "event": "Starting live KEMTLS vs PQ-TLS comparison (50 iterations)\u2026",
+    "result": "INFO",
+    "severity": "INFO"
+  },
+  {
+    "time": "2026-03-08T08:20:57.242054Z",
+    "category": "Benchmark",
+    "event": "Comparison complete \u2014 KEMTLS advantage: 2.459 ms",
+    "result": "PASS",
+    "severity": "INFO"
+  },
+  {
+    "time": "2026-03-08T09:13:27.947919Z",
+    "category": "TLS-Auth",
+    "event": "Classical TLS login for 'admin'",
+    "result": "PASS",
+    "severity": "INFO"
+  },
+  {
+    "time": "2026-03-08T09:14:54.039716Z",
+    "category": "Benchmark",
+    "event": "Starting TLS vs KEMTLS full comparison...",
+    "result": "INFO",
+    "severity": "INFO"
+  },
+  {
+    "time": "2026-03-08T09:14:56.439032Z",
+    "category": "Benchmark",
+    "event": "Full comparison failed: 'charmap' codec can't encode character '\\u274c' in position 11: character maps to <undefined>",
+    "result": "FAIL",
+    "severity": "ERROR"
+  },
+  {
+    "time": "2026-03-08T09:15:47.860541Z",
+    "category": "TLS-Auth",
+    "event": "Classical TLS login for 'admin'",
+    "result": "PASS",
+    "severity": "INFO"
+  },
+  {
+    "time": "2026-03-08T09:15:57.956811Z",
+    "category": "Transport",
+    "event": "KEMTLS handshake completed \u2014 encrypted OIDC channel established",
+    "result": "PASS",
+    "severity": "INFO"
+  },
+  {
+    "time": "2026-03-08T09:16:03.850088Z",
+    "category": "Authentication",
+    "event": "User 'admin' authenticated (KEMTLS encrypted channel)",
+    "result": "PASS",
+    "severity": "INFO"
+  },
+  {
+    "time": "2026-03-08T09:16:03.862534Z",
+    "category": "Authorization",
+    "event": "Auth code issued for 'admin' (KEMTLS channel)",
+    "result": "PASS",
+    "severity": "INFO"
+  },
+  {
+    "time": "2026-03-08T09:16:05.532735Z",
+    "category": "Token",
+    "event": "Tokens issued for 'admin' (KEMTLS channel, ML-DSA-65 signed)",
+    "result": "PASS",
+    "severity": "INFO"
+  },
+  {
+    "time": "2026-03-08T09:16:18.139775Z",
+    "category": "TLS-Auth",
+    "event": "Classical TLS login for 'admin'",
+    "result": "PASS",
+    "severity": "INFO"
+  },
+  {
+    "time": "2026-03-08T09:16:25.994300Z",
+    "category": "Benchmark",
+    "event": "Starting TLS vs KEMTLS full comparison...",
+    "result": "INFO",
+    "severity": "INFO"
+  },
+  {
+    "time": "2026-03-08T09:16:37.701899Z",
+    "category": "Benchmark",
+    "event": "Full comparison failed: 'charmap' codec can't encode character '\\u274c' in position 11: character maps to <undefined>",
+    "result": "FAIL",
+    "severity": "ERROR"
+  },
+  {
+    "time": "2026-03-09T20:56:37.619075Z",
+    "category": "TLS-Auth",
+    "event": "Classical TLS login for 'admin'",
+    "result": "PASS",
+    "severity": "INFO"
+  },
+  {
+    "time": "2026-03-09T20:56:43.903504Z",
+    "category": "Benchmark",
+    "event": "Starting TLS vs KEMTLS full comparison...",
+    "result": "INFO",
+    "severity": "INFO"
+  },
+  {
+    "time": "2026-03-09T20:56:46.728837Z",
+    "category": "Benchmark",
+    "event": "Full comparison benchmark complete",
+    "result": "PASS",
+    "severity": "INFO"
+  },
+  {
+    "time": "2026-03-12T18:44:54.063187Z",
+    "category": "Transport",
+    "event": "KEMTLS handshake completed \u2014 encrypted OIDC channel established",
+    "result": "PASS",
+    "severity": "INFO"
+  },
+  {
+    "time": "2026-03-12T18:45:00.005078Z",
+    "category": "Authentication",
+    "event": "User 'admin' authenticated (KEMTLS encrypted channel)",
+    "result": "PASS",
+    "severity": "INFO"
+  },
+  {
+    "time": "2026-03-12T18:45:00.022746Z",
+    "category": "Authorization",
+    "event": "Auth code issued for 'admin' (KEMTLS channel)",
+    "result": "PASS",
+    "severity": "INFO"
+  },
+  {
+    "time": "2026-03-12T18:45:01.388534Z",
+    "category": "Token",
+    "event": "Tokens issued for 'admin' (KEMTLS channel, ML-DSA-65 signed)",
+    "result": "PASS",
+    "severity": "INFO"
+  },
+  {
+    "time": "2026-03-23T18:34:12.001783Z",
+    "category": "Transport",
+    "event": "KEMTLS browser handshake Round 1 \u2014 ephemeral ML-KEM-768 keypair sent",
+    "result": "PASS",
+    "severity": "INFO"
+  },
+  {
+    "time": "2026-03-23T18:34:14.183609Z",
+    "category": "Transport",
+    "event": "KEMTLS browser handshake Round 1 \u2014 ephemeral ML-KEM-768 keypair sent",
+    "result": "PASS",
+    "severity": "INFO"
+  },
+  {
+    "time": "2026-03-23T18:36:04.184999Z",
+    "category": "Transport",
+    "event": "KEMTLS browser handshake Round 1 \u2014 ephemeral ML-KEM-768 keypair sent",
+    "result": "PASS",
+    "severity": "INFO"
+  },
+  {
+    "time": "2026-03-23T18:36:05.557216Z",
+    "category": "Transport",
+    "event": "KEMTLS browser handshake Round 1 \u2014 ephemeral ML-KEM-768 keypair sent",
+    "result": "PASS",
+    "severity": "INFO"
+  },
+  {
+    "time": "2026-03-23T18:40:16.740822Z",
+    "category": "TLS-Auth",
+    "event": "Classical TLS login for 'admin'",
+    "result": "PASS",
+    "severity": "INFO"
+  },
+  {
+    "time": "2026-03-23T18:40:25.610616Z",
+    "category": "Transport",
+    "event": "KEMTLS browser handshake Round 1 \u2014 ephemeral ML-KEM-768 keypair sent",
+    "result": "PASS",
+    "severity": "INFO"
+  },
+  {
+    "time": "2026-03-23T18:44:09.605435Z",
+    "category": "Transport",
+    "event": "KEMTLS browser handshake Round 1 \u2014 ephemeral ML-KEM-768 keypair sent",
+    "result": "PASS",
+    "severity": "INFO"
+  },
+  {
+    "time": "2026-03-23T18:45:54.038896Z",
+    "category": "Transport",
+    "event": "KEMTLS browser handshake Round 1 \u2014 ephemeral ML-KEM-768 keypair sent",
+    "result": "PASS",
+    "severity": "INFO"
+  },
+  {
+    "time": "2026-03-23T18:47:10.643824Z",
+    "category": "TLS-Auth",
+    "event": "Classical TLS login for 'admin'",
+    "result": "PASS",
+    "severity": "INFO"
+  },
+  {
+    "time": "2026-03-23T18:47:19.568300Z",
+    "category": "Transport",
+    "event": "KEMTLS browser handshake Round 1 \u2014 ephemeral ML-KEM-768 keypair sent",
+    "result": "PASS",
+    "severity": "INFO"
+  },
+  {
+    "time": "2026-03-23T18:53:55.109750Z",
+    "category": "Transport",
+    "event": "KEMTLS browser handshake Round 1 \u2014 ephemeral ML-KEM-768 keypair sent",
+    "result": "PASS",
+    "severity": "INFO"
+  },
+  {
+    "time": "2026-03-23T18:58:55.651037Z",
+    "category": "Transport",
+    "event": "KEMTLS browser handshake Round 1 \u2014 ephemeral ML-KEM-768 keypair sent",
+    "result": "PASS",
+    "severity": "INFO"
+  },
+  {
+    "time": "2026-03-29T06:01:53.611524Z",
+    "category": "Browser-TCP-Login",
+    "event": "Browser hit /api/kemtls-tcp-login for 'admin'",
+    "result": "INFO",
+    "severity": "INFO"
+  },
+  {
+    "time": "2026-03-29T06:01:53.700975Z",
+    "category": "Transport",
+    "event": "KEMTLS handshake completed (ML-KEM-768 + ML-DSA-65)",
+    "result": "PASS",
+    "severity": "INFO"
+  },
+  {
+    "time": "2026-03-29T06:01:53.859313Z",
+    "category": "Authentication",
+    "event": "User 'admin' authenticated",
+    "result": "PASS",
+    "severity": "INFO"
+  },
+  {
+    "time": "2026-03-29T06:01:53.882850Z",
+    "category": "Authorization",
+    "event": "Authorization code issued for 'admin'",
+    "result": "PASS",
+    "severity": "INFO"
+  },
+  {
+    "time": "2026-03-29T06:01:53.941819Z",
+    "category": "Token",
+    "event": "ID Token + Access Token issued for 'admin' (ML-DSA-65)",
+    "result": "PASS",
+    "severity": "INFO"
+  },
+  {
+    "time": "2026-03-29T06:01:53.987090Z",
+    "category": "Browser-TCP-Login",
+    "event": "User 'admin' authenticated via TCP KEMTLS Bridge. Session created.",
+    "result": "PASS",
+    "severity": "INFO"
+  },
+  {
+    "time": "2026-03-29T06:02:08.141954Z",
+    "category": "Benchmark",
+    "event": "Starting TLS vs KEMTLS full comparison...",
+    "result": "INFO",
+    "severity": "INFO"
+  },
+  {
+    "time": "2026-03-29T06:02:36.158290Z",
+    "category": "Benchmark",
+    "event": "Full comparison benchmark complete",
+    "result": "PASS",
+    "severity": "INFO"
+  },
+  {
+    "time": "2026-03-29T06:02:54.919875Z",
+    "category": "TLS-Auth",
+    "event": "Classical TLS login for 'admin'",
+    "result": "PASS",
+    "severity": "INFO"
+  },
+  {
+    "time": "2026-03-29T06:03:21.364363Z",
+    "category": "Benchmark",
+    "event": "Starting live KEMTLS vs PQ-TLS comparison (50 iterations)\u2026",
+    "result": "INFO",
+    "severity": "INFO"
+  },
+  {
+    "time": "2026-03-29T06:03:26.431208Z",
+    "category": "Benchmark",
+    "event": "Comparison complete \u2014 KEMTLS advantage: 2.211 ms",
+    "result": "PASS",
+    "severity": "INFO"
+  },
+  {
+    "time": "2026-03-29T06:41:37.846095Z",
+    "category": "Browser-TCP-Login",
+    "event": "Browser hit /api/kemtls-tcp-login for 'admin'",
+    "result": "INFO",
+    "severity": "INFO"
+  },
+  {
+    "time": "2026-03-29T06:41:37.921827Z",
+    "category": "Transport",
+    "event": "KEMTLS handshake completed (ML-KEM-768 + ML-DSA-65)",
+    "result": "PASS",
+    "severity": "INFO"
+  },
+  {
+    "time": "2026-03-29T06:41:38.091675Z",
+    "category": "Authentication",
+    "event": "User 'admin' authenticated",
+    "result": "PASS",
+    "severity": "INFO"
+  },
+  {
+    "time": "2026-03-29T06:41:38.119048Z",
+    "category": "Authorization",
+    "event": "Authorization code issued for 'admin'",
+    "result": "PASS",
+    "severity": "INFO"
+  },
+  {
+    "time": "2026-03-29T06:41:38.185424Z",
+    "category": "Token",
+    "event": "ID Token + Access Token issued for 'admin' (ML-DSA-65)",
+    "result": "PASS",
+    "severity": "INFO"
+  },
+  {
+    "time": "2026-03-29T06:41:38.233943Z",
+    "category": "Browser-TCP-Login",
+    "event": "User 'admin' authenticated via TCP KEMTLS Bridge. Session created.",
+    "result": "PASS",
+    "severity": "INFO"
+  },
+  {
+    "time": "2026-03-29T06:41:50.481852Z",
+    "category": "TLS-Auth",
+    "event": "Classical TLS login for 'admin'",
+    "result": "PASS",
+    "severity": "INFO"
+  },
+  {
+    "time": "2026-03-29T06:42:18.415954Z",
+    "category": "Benchmark",
+    "event": "Starting live KEMTLS vs PQ-TLS comparison (50 iterations)\u2026",
+    "result": "INFO",
+    "severity": "INFO"
+  },
+  {
+    "time": "2026-03-29T06:42:23.437915Z",
+    "category": "Benchmark",
+    "event": "Comparison complete \u2014 KEMTLS advantage: 2.143 ms",
+    "result": "PASS",
+    "severity": "INFO"
+  },
+  {
+    "time": "2026-03-29T06:42:54.490898Z",
+    "category": "Benchmark",
+    "event": "Starting live KEMTLS vs PQ-TLS comparison (50 iterations)\u2026",
+    "result": "INFO",
+    "severity": "INFO"
+  },
+  {
+    "time": "2026-03-29T06:42:59.471619Z",
+    "category": "Benchmark",
+    "event": "Comparison complete \u2014 KEMTLS advantage: 2.130 ms",
+    "result": "PASS",
+    "severity": "INFO"
+  }
+]

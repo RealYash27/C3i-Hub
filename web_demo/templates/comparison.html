@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QuantumShield · TLS vs KEMTLS Comparison</title>
+    <meta name="description" content="Side-by-side comparison of Classical TLS and Post-Quantum KEMTLS">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="/static/comparison.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+    <script>
+        (function(){
+            var t = localStorage.getItem('quantumshield-theme') || 'light';
+            document.documentElement.setAttribute('data-theme', t);
+        })();
+    </script>
+    <!-- Particle network background -->
+    <canvas id="particleCanvas" data-accent="kemtls"></canvas>
+    <div class="comparison-page" style="position:relative;z-index:1;">
+        <!-- Header -->
+        <header class="comp-header">
+            <div class="header-left">
+                <a href="/" class="back-link"><i class="fas fa-arrow-left"></i></a>
+                <h1><i class="fas fa-shield-halved"></i> QuantumShield</h1>
+                <span class="badge">Comparison</span>
+            </div>
+            <div class="header-right">
+                <button class="btn btn-primary" id="runBenchBtn" onclick="runLiveBenchmark()">
+                    <i class="fas fa-play"></i> Run Live Benchmark
+                </button>
+                <button class="comp-theme-toggle" id="themeToggle" onclick="toggleCompTheme()" title="Toggle theme">
+                    <i class="fas fa-moon" id="themeIcon"></i>
+                </button>
+            </div>
+        </header>
+
+        <!-- Security Verdict -->
+        <section class="verdict-section">
+            <div class="verdict-card danger">
+                <div class="verdict-icon"><i class="fas fa-lock"></i></div>
+                <h3>Classical TLS</h3>
+                <div class="verdict-status danger">
+                    <i class="fas fa-times-circle"></i> Quantum Vulnerable
+                </div>
+                <div class="verdict-detail">
+                    <p>RSA and ECDHE can be broken by Shor's algorithm on a sufficiently powerful quantum computer.</p>
+                </div>
+                <div class="verdict-algos">
+                    <span>RSA-2048</span><span>ECDHE-P256</span><span>SHA-256</span>
+                </div>
+            </div>
+
+            <div class="verdict-vs">VS</div>
+
+            <div class="verdict-card safe">
+                <div class="verdict-icon"><i class="fas fa-atom"></i></div>
+                <h3>Post-Quantum KEMTLS</h3>
+                <div class="verdict-status safe">
+                    <i class="fas fa-check-circle"></i> Quantum Safe
+                </div>
+                <div class="verdict-detail">
+                    <p>ML-KEM-768 and ML-DSA-65 are NIST-standardized lattice-based algorithms resistant to quantum
+                        attacks.</p>
+                </div>
+                <div class="verdict-algos">
+                    <span>ML-KEM-768</span><span>ML-DSA-65</span><span>SHA3-256</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Algorithm Comparison Table -->
+        <section class="algo-section">
+            <h2><i class="fas fa-table"></i> Cryptographic Algorithm Comparison</h2>
+            <div class="algo-table-wrapper">
+                <table class="algo-table" id="algoTable">
+                    <thead>
+                        <tr>
+                            <th>Purpose</th>
+                            <th>Classical TLS</th>
+                            <th>Post-Quantum KEMTLS</th>
+                            <th>NIST Standard</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Key Exchange</td>
+                            <td><span class="chip danger">ECDHE-P256</span></td>
+                            <td><span class="chip safe">ML-KEM-768 (Kyber)</span></td>
+                            <td>FIPS 203</td>
+                        </tr>
+                        <tr>
+                            <td>Authentication</td>
+                            <td><span class="chip danger">RSA-2048</span></td>
+                            <td><span class="chip safe">ML-DSA-65 (Dilithium)</span></td>
+                            <td>FIPS 204</td>
+                        </tr>
+                        <tr>
+                            <td>Hashing</td>
+                            <td><span class="chip neutral">SHA-256</span></td>
+                            <td><span class="chip safe">SHA3-256</span></td>
+                            <td>FIPS 202</td>
+                        </tr>
+                        <tr>
+                            <td>Symmetric</td>
+                            <td><span class="chip neutral">AES-256-GCM</span></td>
+                            <td><span class="chip neutral">AES-256-GCM</span></td>
+                            <td>FIPS 197</td>
+                        </tr>
+                        <tr>
+                            <td>Token Signing</td>
+                            <td><span class="chip danger">RSA-2048-PSS</span></td>
+                            <td><span class="chip safe">ML-DSA-65</span></td>
+                            <td>FIPS 204</td>
+                        </tr>
+                        <tr>
+                            <td>Quantum Safe</td>
+                            <td><span class="chip danger">No</span></td>
+                            <td><span class="chip safe">Yes Level 3</span></td>
+                            <td></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Benchmark Charts -->
+        <section class="charts-section">
+            <h2><i class="fas fa-chart-bar"></i> Performance Comparison</h2>
+
+            <!-- Status banner -->
+            <div id="benchStatus" class="bench-status" style="display:none">
+                <i class="fas fa-spinner fa-spin" id="benchSpinner"></i>
+                <span id="benchStatusText">Running benchmark...</span>
+            </div>
+
+            <div class="charts-grid" id="chartsGrid">
+                <div class="chart-card">
+                    <h3>Handshake Latency (ms)</h3>
+                    <canvas id="handshakeChart"></canvas>
+                </div>
+                <div class="chart-card">
+                    <h3>Token Generation (ms)</h3>
+                    <canvas id="tokenGenChart"></canvas>
+                </div>
+                <div class="chart-card">
+                    <h3>Token Verification (ms)</h3>
+                    <canvas id="tokenVerifyChart"></canvas>
+                </div>
+                <div class="chart-card">
+                    <h3>Signature Size (bytes)</h3>
+                    <canvas id="sigSizeChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Empty state -->
+            <div id="chartsEmpty" class="charts-empty">
+                <i class="fas fa-chart-bar"></i>
+                <p>Click <strong>Run Live Benchmark</strong> to measure TLS vs KEMTLS performance in real time.</p>
+                <p class="sub">Runs 50 iterations of real crypto operations takes ~30 seconds.</p>
+            </div>
+        </section>
+
+        <!-- Key Size Comparison -->
+        <section class="sizes-section" id="sizesSection" style="display:none">
+            <h2><i class="fas fa-ruler"></i> Key & Signature Sizes</h2>
+            <div class="sizes-grid" id="sizesGrid"></div>
+        </section>
+
+        <!-- Auth Latency & Schardong Paper Comparison -->
+        <section class="sizes-section" id="authLatencySection" style="display:none">
+            <h2><i class="fas fa-clock"></i> Authentication Latency vs. Schardong Paper</h2>
+            <div class="charts-grid active" style="margin-bottom:1.5rem">
+                <div class="chart-card">
+                    <h3>Full Auth Latency (ms)</h3>
+                    <canvas id="authLatencyChart"></canvas>
+                </div>
+            </div>
+            <div id="schardongTable" style="overflow-x:auto"></div>
+        </section>
+
+        <!-- OIDC Message Sizes -->
+        <section class="sizes-section" id="msgSizesSection" style="display:none">
+
+            <h2><i class="fas fa-envelope"></i> OIDC Message Sizes</h2>
+            <div id="msgSizesGrid" class="sizes-grid"></div>
+        </section>
+
+        <!-- Footer Actions -->
+        <section class="footer-actions">
+            <a href="/" class="btn btn-outline"><i class="fas fa-arrow-left"></i> Back to Login</a>
+            <a href="/dashboard" class="btn btn-outline"><i class="fas fa-chart-line"></i> Full Dashboard</a>
+        </section>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="/static/particles.js"></script>
+    <script src="/static/comparison.js"></script>
+    <script>
+        function toggleCompTheme() {
+            var current = document.documentElement.getAttribute('data-theme');
+            var next = current === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', next);
+            localStorage.setItem('quantumshield-theme', next);
+            var icon = document.getElementById('themeIcon');
+            if (icon) icon.className = next === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+        }
+        (function(){
+            var t = document.documentElement.getAttribute('data-theme');
+            var icon = document.getElementById('themeIcon');
+            if (icon) icon.className = t === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+        })();
+    </script>
+</body>
+
+</html>

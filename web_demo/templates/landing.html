@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QuantumShield · Post-Quantum vs Classical Security</title>
+    <meta name="description" content="Compare Classical TLS and Post-Quantum KEMTLS authentication side-by-side">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/static/landing.css">
+</head>
+<body>
+    <script>
+        (function(){
+            var t=localStorage.getItem('quantumshield-theme')||'light';
+            document.documentElement.setAttribute('data-theme',t);
+        })();
+    </script>
+    <div class="landing-page">
+        <!-- Particle network background -->
+        <canvas id="particleCanvas" data-accent="kemtls"></canvas>
+
+        <!-- Header -->
+        <header class="landing-header">
+            <div class="brand">
+                <i class="fas fa-shield-halved"></i>
+                <span>QuantumShield</span>
+                <span class="badge">PQ-OIDC</span>
+            </div>
+            <nav class="landing-nav">
+                <a href="/compare"><i class="fas fa-chart-bar"></i> Comparison</a>
+                <a href="/dashboard"><i class="fas fa-chart-line"></i> Dashboard</a>
+                <button class="landing-theme-toggle" id="landingThemeToggle" onclick="toggleLandingTheme()" title="Toggle theme">
+                    <i class="fas fa-moon" id="landingThemeIcon"></i>
+                </button>
+            </nav>
+        </header>
+
+        <!-- Hero -->
+        <section class="hero">
+            <h1>Post-Quantum <span class="gradient-text">OpenID Connect</span></h1>
+            <p class="hero-sub">Experience the difference between classical TLS and quantum-resistant KEMTLS authentication. Choose your security model below.</p>
+        </section>
+
+        <!-- Mode Cards -->
+        <section class="mode-cards">
+            <!-- Classical TLS Card -->
+            <a href="/tls-login" class="mode-card tls-card" id="tlsCard">
+                <div class="card-badge danger">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    Quantum Vulnerable
+                </div>
+                <div class="card-icon">
+                    <i class="fas fa-lock"></i>
+                </div>
+                <h2>Classical TLS</h2>
+                <p class="card-desc">Traditional authentication using RSA-2048 + ECDHE key exchange</p>
+                <div class="card-algorithms">
+                    <span class="algo-chip"><i class="fas fa-key"></i> RSA-2048</span>
+                    <span class="algo-chip"><i class="fas fa-right-left"></i> ECDHE-P256</span>
+                    <span class="algo-chip"><i class="fas fa-hashtag"></i> SHA-256</span>
+                    <span class="algo-chip"><i class="fas fa-shield"></i> AES-256-GCM</span>
+                </div>
+                <div class="card-footer">
+                    <span class="card-action">Login with TLS <i class="fas fa-arrow-right"></i></span>
+                </div>
+            </a>
+
+            <!-- VS Divider -->
+            <div class="vs-divider">
+                <span>VS</span>
+            </div>
+
+            <!-- KEMTLS Card -->
+            <a href="/kemtls-login" class="mode-card kemtls-card" id="kemtlsCard">
+                <div class="card-badge success">
+                    <i class="fas fa-shield-halved"></i>
+                    Quantum Safe
+                </div>
+                <div class="card-icon">
+                    <i class="fas fa-atom"></i>
+                </div>
+                <h2>Post-Quantum KEMTLS</h2>
+                <p class="card-desc">Next-generation authentication with ML-KEM-768 + ML-DSA-65</p>
+                <div class="card-algorithms">
+                    <span class="algo-chip pq"><i class="fas fa-cube"></i> ML-KEM-768</span>
+                    <span class="algo-chip pq"><i class="fas fa-signature"></i> ML-DSA-65</span>
+                    <span class="algo-chip pq"><i class="fas fa-hashtag"></i> SHA3-256</span>
+                    <span class="algo-chip pq"><i class="fas fa-shield"></i> AES-256-GCM</span>
+                </div>
+                <div class="card-footer">
+                    <span class="card-action">Login with KEMTLS <i class="fas fa-arrow-right"></i></span>
+                </div>
+            </a>
+        </section>
+
+        <!-- Architecture Preview -->
+        <section class="arch-section">
+            <h3><i class="fas fa-diagram-project"></i> System Architecture</h3>
+            <div class="arch-flow">
+                <div class="arch-node">
+                    <i class="fas fa-user"></i>
+                    <span>Client</span>
+                </div>
+                <div class="arch-arrow">
+                    <div class="arrow-line"></div>
+                    <span>KEMTLS Channel</span>
+                </div>
+                <div class="arch-node highlight">
+                    <i class="fas fa-server"></i>
+                    <span>OIDC Server</span>
+                </div>
+                <div class="arch-arrow">
+                    <div class="arrow-line"></div>
+                    <span>PQ Signatures</span>
+                </div>
+                <div class="arch-node">
+                    <i class="fas fa-key"></i>
+                    <span>Token Service</span>
+                </div>
+            </div>
+            <div class="arch-footer">
+                <div class="arch-stat">
+                    <span class="stat-val">NIST Level 3</span>
+                    <span class="stat-label">Security</span>
+                </div>
+                <div class="arch-stat">
+                    <span class="stat-val">&lt;1ms</span>
+                    <span class="stat-label">Handshake</span>
+                </div>
+                <div class="arch-stat">
+                    <span class="stat-val">FIPS 203/204</span>
+                    <span class="stat-label">Standards</span>
+                </div>
+                <div class="arch-stat">
+                    <span class="stat-val">Zero Classical</span>
+                    <span class="stat-label">PK Crypto</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="landing-footer">
+            <p>QuantumShield · Post-Quantum Secure OpenID Connect using KEMTLS</p>
+        </footer>
+    </div>
+</body>
+    <script>
+        function toggleLandingTheme() {
+            var current = document.documentElement.getAttribute('data-theme');
+            var next = current === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', next);
+            localStorage.setItem('quantumshield-theme', next);
+            var icon = document.getElementById('landingThemeIcon');
+            if (icon) icon.className = next === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+        }
+        (function(){
+            var t = document.documentElement.getAttribute('data-theme');
+            var icon = document.getElementById('landingThemeIcon');
+            if (icon) icon.className = t === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+        })();
+    </script>
+    <script src="/static/particles.js"></script>
+</html>

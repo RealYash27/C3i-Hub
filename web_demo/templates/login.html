@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login · QuantumShield Post-Quantum OIDC</title>
+    <meta name="description" content="Post-Quantum Secure OpenID Connect login powered by KEMTLS with ML-KEM-768 and ML-DSA-65">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/login.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+    <script>
+        (function(){
+            var t = localStorage.getItem('quantumshield-theme') || localStorage.getItem('theme') || 'light';
+            document.documentElement.setAttribute('data-theme', t);
+        })();
+    </script>
+    <!-- Particle network background -->
+    <canvas id="particleCanvas" data-accent="kemtls"></canvas>
+    <div class="login-page">
+        <!-- ═══════════ LEFT PANEL Login Form ═══════════ -->
+        <div class="login-left">
+            <button class="login-theme-toggle" onclick="toggleTheme()" title="Toggle dark mode">
+                <i class="fas fa-moon" id="themeIcon"></i>
+            </button>
+            <a href="/" class="back-link"><i class="fas fa-arrow-left"></i> Back to mode selection</a>
+
+            <div class="login-header">
+                <div class="login-brand">
+                    <i class="fas fa-shield-halved"></i>
+                    <h1>QuantumShield</h1>
+                    <span class="version">PQ-OIDC</span>
+                </div>
+                <p class="login-subtitle">Post-Quantum Secure OpenID Connect</p>
+            </div>
+
+            <div class="protocol-badge">
+                <i class="fas fa-lock"></i>
+                KEMTLS · Kyber768 + Dilithium3
+            </div>
+
+            <div class="kemtls-info-box">
+                <i class="fas fa-shield-halved kemtls-info-icon"></i>
+                <span class="kemtls-info-text">
+                    <strong class="kemtls-info-title">Hybrid KEMTLS (browser):</strong><br>
+                    The server performs real <strong class="kemtls-hl">ML-KEM-768</strong> key encapsulation and
+                    derives the OIDC session key via <strong class="kemtls-hl">HKDF-SHA256</strong>.
+                    That PQ-derived key is wrapped with ECDH P-256 (Web Crypto API) for one-time delivery to
+                    the browser then all OIDC traffic (authorize + token) is encrypted with the
+                    <strong class="kemtls-hl">ML-KEM-768-derived AES-256-GCM key</strong>.<br>
+                    Full PATH A (no wrapping): <code class="kemtls-code">kemtls_http_adapter.py</code>
+                    and the TCP client/server pair.
+                </span>
+            </div>
+
+            <form class="login-form" id="loginForm" onsubmit="handleLogin(event)">
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" name="username" placeholder="Enter your username"
+                        autocomplete="username" required value="admin">
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" placeholder="Enter your password"
+                        autocomplete="current-password" required value="quantum123">
+                </div>
+
+                <div class="login-error" id="loginError">
+                    <i class="fas fa-exclamation-circle"></i>
+                    <span id="errorText">Invalid credentials</span>
+                </div>
+
+                <button type="submit" class="login-btn" id="loginBtn">
+                    <span class="btn-text">
+                        <i class="fas fa-right-to-bracket"></i> Sign In via KEMTLS
+                    </span>
+                    <div class="spinner"></div>
+                </button>
+            </form>
+
+            <div class="login-footer">
+                <div class="crypto-info">
+                    <div class="crypto-chip"><i class="fas fa-circle"></i> ML-KEM-768</div>
+                    <div class="crypto-chip"><i class="fas fa-circle"></i> ML-DSA-65</div>
+                    <div class="crypto-chip"><i class="fas fa-circle"></i> AES-256-GCM</div>
+                    <div class="crypto-chip"><i class="fas fa-circle"></i> NIST Level 3</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ═══════════ RIGHT PANEL Flow Visualization ═══════════ -->
+        <div class="login-right">
+            <div class="flow-header">
+                <h2><i class="fas fa-diagram-project"></i> OIDC + KEMTLS Protocol Flow</h2>
+                <p>Watch the post-quantum authentication process in real-time</p>
+            </div>
+
+            <!-- Idle state -->
+            <div class="flow-idle" id="flowIdle">
+                <div class="flow-idle-content">
+                    <div class="flow-idle-icon">
+                        <i class="fas fa-shield-halved"></i>
+                    </div>
+                    <h3>Ready for Authentication</h3>
+                    <p>Click <strong>Sign In</strong> to start the KEMTLS handshake and observe the complete OIDC Authorization Code flow with post-quantum cryptography.</p>
+                </div>
+            </div>
+
+            <!-- Flow steps (shown during auth) -->
+            <div class="flow-steps" id="flowSteps">
+                <!-- Step 1: KEMTLS ServerHello -->
+                <div class="flow-step" id="step-1" data-step="1">
+                    <div class="step-icon"><i class="fas fa-server"></i></div>
+                    <div class="step-body">
+                        <div class="step-name">
+                            KEMTLS: ServerHello
+                            <span class="step-direction">server → client</span>
+                        </div>
+                        <div class="step-desc">Server sends Kyber768 public key + ML-DSA-65nature key</div>
+                        <div class="step-timing" id="timing-1"></div>
+                        <div class="step-detail" id="detail-1"></div>
+                    </div>
+                </div>
+
+                <!-- Step 2: Client KEM Encap -->
+                <div class="flow-step" id="step-2" data-step="2">
+                    <div class="step-icon"><i class="fas fa-laptop"></i></div>
+                    <div class="step-body">
+                        <div class="step-name">
+                            KEMTLS: Client Encapsulation
+                            <span class="step-direction">client → server</span>
+                        </div>
+                        <div class="step-desc">Client encapsulates shared secret using ML-KEM-768 (FIPS 203)</div>
+                        <div class="step-timing" id="timing-2"></div>
+                        <div class="step-detail" id="detail-2"></div>
+                    </div>
+                </div>
+
+                <!-- Step 3: Server KEM Decap -->
+                <div class="flow-step" id="step-3" data-step="3">
+                    <div class="step-icon"><i class="fas fa-key"></i></div>
+                    <div class="step-body">
+                        <div class="step-name">
+                            KEMTLS: Server Decapsulation
+                            <span class="step-direction">server</span>
+                        </div>
+                        <div class="step-desc">Server decapsulates to derive shared secret</div>
+                        <div class="step-timing" id="timing-3"></div>
+                        <div class="step-detail" id="detail-3"></div>
+                    </div>
+                </div>
+
+                <!-- Step 4: Server Auth -->
+                <div class="flow-step" id="step-4" data-step="4">
+                    <div class="step-icon"><i class="fas fa-signature"></i></div>
+                    <div class="step-body">
+                        <div class="step-name">
+                            KEMTLS: Server Authentication
+                            <span class="step-direction">server → client</span>
+                        </div>
+                        <div class="step-desc">Server signs transcript with ML-DSA-65 (FIPS 204)</div>
+                        <div class="step-timing" id="timing-4"></div>
+                        <div class="step-detail" id="detail-4"></div>
+                    </div>
+                </div>
+
+                <!-- Step 5: Client Verify -->
+                <div class="flow-step" id="step-5" data-step="5">
+                    <div class="step-icon"><i class="fas fa-check-double"></i></div>
+                    <div class="step-body">
+                        <div class="step-name">
+                            KEMTLS: Signature Verification
+                            <span class="step-direction">client</span>
+                        </div>
+                        <div class="step-desc">Client verifies secure channel established</div>
+                        <div class="step-timing" id="timing-5"></div>
+                        <div class="step-detail" id="detail-5"></div>
+                    </div>
+                </div>
+
+                <!-- Step 6: OIDC Authorization -->
+                <div class="flow-step" id="step-6" data-step="6">
+                    <div class="step-icon"><i class="fas fa-id-card"></i></div>
+                    <div class="step-body">
+                        <div class="step-name">
+                            OIDC: Authorization
+                            <span class="step-direction">authorization server</span>
+                        </div>
+                        <div class="step-desc">Issue authorization code over KEMTLS channel</div>
+                        <div class="step-timing" id="timing-6"></div>
+                        <div class="step-detail" id="detail-6"></div>
+                    </div>
+                </div>
+
+                <!-- Step 7: Token Exchange -->
+                <div class="flow-step" id="step-7" data-step="7">
+                    <div class="step-icon"><i class="fas fa-coins"></i></div>
+                    <div class="step-body">
+                        <div class="step-name">
+                            OIDC: Token Exchange
+                            <span class="step-direction">client → server</span>
+                        </div>
+                        <div class="step-desc">Exchange auth code for ID Token + Access Token (ML-DSA-65 signed)</div>
+                        <div class="step-timing" id="timing-7"></div>
+                        <div class="step-detail" id="detail-7"></div>
+                    </div>
+                </div>
+
+                <!-- Step 8: Complete -->
+                <div class="flow-step" id="step-8" data-step="8">
+                    <div class="step-icon"><i class="fas fa-shield-halved"></i></div>
+                    <div class="step-body">
+                        <div class="step-name">
+                            Authenticated
+                            <span class="step-direction">complete</span>
+                        </div>
+                        <div class="step-desc">Post-quantum secure session established</div>
+                        <div class="step-timing" id="timing-8"></div>
+                        <div class="step-detail" id="detail-8"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Summary card -->
+            <div class="flow-summary" id="flowSummary">
+                <div class="flow-summary-header">
+                    <i class="fas fa-circle-check"></i>
+                    <h3>Authentication Complete</h3>
+                </div>
+                <div class="summary-grid" id="summaryGrid"></div>
+            </div>
+
+            <!-- Token display -->
+            <div class="token-display" id="tokenDisplay">
+                <h4><i class="fas fa-key"></i> ID Token (ML-DSA-65 signed JWT)</h4>
+                <div class="token-text" id="tokenText"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/static/particles.js"></script>
+    <script src="/static/login.js"></script>
+</body>
+
+</html>

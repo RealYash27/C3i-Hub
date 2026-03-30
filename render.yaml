@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: quantumshield
+    env: docker
+    region: ohio
+    plan: free
+    healthCheckPath: /
+    envVars:
+      - key: FLASK_SESSION_SECURE
+        value: "1"
+      # PORT is provided automatically by Render

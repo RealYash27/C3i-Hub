@@ -1,0 +1,6 @@
+__pycache__/
+*.py[cod]
+
+# Demo dashboard state files
+dashboard/runtime_state.json
+dashboard/demo_mode.json
