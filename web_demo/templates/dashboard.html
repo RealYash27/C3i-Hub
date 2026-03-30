@@ -35,15 +35,15 @@
                 </button>
                 <div class="connection-status" id="connectionStatus">
                     <i class="fas fa-circle"></i>
-                    <span>Connecting...</span>
+                    <span class="hdr-text">Connecting...</span>
                 </div>
                 <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()" title="Toggle theme">
                     <i class="fas fa-moon" id="themeIcon"></i>
                 </button>
-                <button class="btn btn-primary" onclick="runAllTests()">
-                    <i class="fas fa-play"></i> Run All Tests
+                <button class="btn btn-primary hdr-btn" onclick="runAllTests()" title="Run All Tests">
+                    <i class="fas fa-play"></i><span class="hdr-text"> Run All Tests</span>
                 </button>
-                <button id="logoutBtn" onclick="handleLogout()"
+                <button id="logoutBtn" class="hdr-btn hdr-logout" onclick="handleLogout()"
                     title="Sign out"
                     style="padding:0.45rem 1rem;font-size:0.85rem;font-weight:600;border-radius:8px;
                            background:rgba(239,68,68,0.12);color:#f87171;
@@ -51,7 +51,7 @@
                            transition:background 0.2s,box-shadow 0.2s;display:flex;align-items:center;gap:6px;"
                     onmouseenter="this.style.background='rgba(239,68,68,0.22)';this.style.boxShadow='0 2px 10px rgba(239,68,68,0.2)'"
                     onmouseleave="this.style.background='rgba(239,68,68,0.12)';this.style.boxShadow='none'">
-                    <i class="fas fa-right-from-bracket"></i> Logout
+                    <i class="fas fa-right-from-bracket"></i><span class="hdr-text"> Logout</span>
                 </button>
             </div>
         </header>
