@@ -71,8 +71,10 @@ def setup_tls_comparison(app, OIDC_USERS, _verify_password, log_event, login_req
         """
         try:
             from benchmark.benchmark_compare import benchmark_auth_latency
-            log_event("Benchmark", "Starting authentication latency benchmark...", "INFO", "INFO")
-            result = benchmark_auth_latency(iterations=1000)
+            # Reduced iterations for web-triggered benchmarks on Render/Production
+            iterations = int(os.environ.get("BENCHMARK_ITERATIONS", 100))
+            log_event("Benchmark", f"Starting authentication latency benchmark ({iterations} iterations)...", "INFO", "INFO")
+            result = benchmark_auth_latency(iterations=iterations)
             log_event("Benchmark", "Authentication latency benchmark complete", "PASS", "INFO")
             return jsonify({"success": True, "data": result})
         except Exception as e:
@@ -89,8 +91,10 @@ def setup_tls_comparison(app, OIDC_USERS, _verify_password, log_event, login_req
         """
         try:
             from benchmark.benchmark_compare import run_full_comparison
-            log_event("Benchmark", "Starting TLS vs KEMTLS full comparison...", "INFO", "INFO")
-            result = run_full_comparison(iterations=1000)
+            # Reduced iterations for web-triggered benchmarks on Render/Production
+            iterations = int(os.environ.get("BENCHMARK_ITERATIONS", 100))
+            log_event("Benchmark", f"Starting TLS vs KEMTLS full comparison ({iterations} iterations)...", "INFO", "INFO")
+            result = run_full_comparison(iterations=iterations)
             log_event("Benchmark", "Full comparison benchmark complete", "PASS", "INFO")
             return jsonify({"success": True, "data": result})
         except Exception as e:

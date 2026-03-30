@@ -55,4 +55,4 @@ EXPOSE $PORT
 
 # Start command
 # gevent worker is required for flask-sock WebSocket support (eventlet breaks RFC 6455 framing)
-CMD gunicorn -k gevent -w 1 --bind 0.0.0.0:$PORT --chdir web_demo "server:app"
+CMD gunicorn -k gevent -w 1 --timeout 300 --bind 0.0.0.0:$PORT --chdir web_demo "server:app"

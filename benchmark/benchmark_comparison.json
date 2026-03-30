@@ -2,89 +2,89 @@
   "disclaimer": "All measurements are CPU-only, no network. Direct numeric comparison to literature is not meaningful without matching hardware and network.",
   "handshake": {
     "tls": {
-      "mean": 1.3773,
-      "median": 1.241,
-      "stdev": 0.5204,
-      "min": 0.844,
-      "max": 7.535
+      "mean": 1.6673,
+      "median": 1.423,
+      "stdev": 0.7068,
+      "min": 0.842,
+      "max": 8.404
     },
     "kemtls": {
-      "mean": 1.0801,
-      "median": 0.9459,
-      "stdev": 0.4555,
-      "min": 0.5077,
-      "max": 4.2522
+      "mean": 1.3699,
+      "median": 1.1655,
+      "stdev": 0.7752,
+      "min": 0.5487,
+      "max": 11.045
     },
-    "kemtls_advantage_ms": 0.2972,
-    "kemtls_faster_pct": 21.58
+    "kemtls_advantage_ms": 0.2974,
+    "kemtls_faster_pct": 17.84
   },
   "token_generation": {
     "rsa_2048": {
-      "mean": 0.6122,
-      "median": 0.5176,
-      "stdev": 0.285,
-      "min": 0.2996,
-      "max": 2.3487
+      "mean": 0.7189,
+      "median": 0.6092,
+      "stdev": 0.3743,
+      "min": 0.3718,
+      "max": 5.4157
     },
     "ml_dsa_65": {
-      "mean": 0.7596,
-      "median": 0.6096,
-      "stdev": 0.5045,
-      "min": 0.2147,
-      "max": 5.6012
+      "mean": 0.9336,
+      "median": 0.7361,
+      "stdev": 0.7169,
+      "min": 0.2552,
+      "max": 11.5121
     }
   },
   "token_verification": {
     "rsa_2048": {
-      "mean": 0.097,
-      "median": 0.0831,
-      "stdev": 0.053,
-      "min": 0.0576,
-      "max": 0.7021
+      "mean": 0.1054,
+      "median": 0.0783,
+      "stdev": 0.0682,
+      "min": 0.0587,
+      "max": 0.7362
     },
     "ml_dsa_65": {
-      "mean": 0.2136,
-      "median": 0.2007,
-      "stdev": 0.0646,
-      "min": 0.1408,
-      "max": 0.5692
+      "mean": 0.2621,
+      "median": 0.2127,
+      "stdev": 0.2048,
+      "min": 0.1632,
+      "max": 5.601
     }
   },
   "userinfo_latency": {
     "warning": "ENVIRONMENT: CPU-only, no network.",
     "tls": {
-      "mean": 0.098,
-      "median": 0.0818,
-      "stdev": 0.0617,
-      "min": 0.0591,
-      "max": 0.8348
+      "mean": 0.1819,
+      "median": 0.1724,
+      "stdev": 0.1229,
+      "min": 0.0669,
+      "max": 2.5201
     },
     "kemtls": {
-      "mean": 0.2169,
-      "median": 0.1983,
-      "stdev": 0.081,
-      "min": 0.1447,
-      "max": 0.9316
+      "mean": 0.4142,
+      "median": 0.4244,
+      "stdev": 0.1613,
+      "min": 0.1836,
+      "max": 2.5813
     }
   },
   "auth_latency": {
     "warning": "ENVIRONMENT: CPU-only, no network. Direct numeric comparison to literature is not meaningful without matching hardware and network.",
     "tls": {
-      "mean": 2.2939,
-      "median": 2.0243,
-      "stdev": 2.2868,
-      "min": 1.2165,
-      "max": 59.632
+      "mean": 3.0069,
+      "median": 2.632,
+      "stdev": 1.5449,
+      "min": 1.4039,
+      "max": 25.1818
     },
     "kemtls": {
-      "mean": 2.1865,
-      "median": 1.9779,
-      "stdev": 0.9781,
-      "min": 0.9677,
-      "max": 15.5152
+      "mean": 3.028,
+      "median": 2.7313,
+      "stdev": 1.6327,
+      "min": 1.168,
+      "max": 19.8039
     },
-    "kemtls_advantage_ms": 0.1074,
-    "kemtls_faster_pct": 4.7,
+    "kemtls_advantage_ms": -0.0212,
+    "kemtls_faster_pct": -0.7,
     "literature_reference": {
       "source": "Schardong et al., 'Post-Quantum OpenID Connect', IEEE/ACM Symp. on Security and Privacy (S&P), 2023.",
       "environment": "Raspberry Pi 4 (1.5 GHz ARM Cortex-A72), LAN, liboqs with Kyber768 + Dilithium3, Ubuntu 20.04",
