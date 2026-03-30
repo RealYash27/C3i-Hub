@@ -332,16 +332,68 @@ body {
     padding-top: 1rem;
 }
 
-@media (max-width: 768px) {
-    .verdict-section {
-        flex-direction: column;
-    }
+/* ── Responsive ─────────────────────────────────────────────────── */
 
-    .verdict-vs {
-        transform: none;
-    }
+/* iPad / Small Laptop (≤ 1024px) */
+@media (max-width: 1024px) {
+    .comparison-page { padding: 1.25rem 1.5rem 2rem; }
 
-    .charts-grid.active {
-        grid-template-columns: 1fr;
-    }
+    .verdict-section { gap: 1rem; }
+
+    .charts-grid.active { grid-template-columns: 1fr 1fr; }
+
+    .algo-table-wrapper { overflow-x: auto; }
+    .algo-table         { min-width: 540px; }
 }
+
+/* Tablet (≤ 768px) */
+@media (max-width: 768px) {
+    .comparison-page { padding: 1rem 1.25rem 2rem; }
+
+    /* Header */
+    .comp-header { flex-wrap: wrap; gap: 0.75rem; }
+    .header-left h1 { font-size: 1rem; }
+
+    /* Verdict section: stack */
+    .verdict-section { flex-direction: column; }
+    .verdict-vs      { display: none; } /* redundant at full width */
+
+    /* Charts: single column */
+    .charts-grid.active { grid-template-columns: 1fr; }
+
+    /* Footer actions */
+    .footer-actions { flex-direction: column; align-items: stretch; }
+    .footer-actions .btn { text-align: center; justify-content: center; }
+
+    /* Section spacing */
+    .section-label { margin: 1.75rem 0 1rem; }
+}
+
+/* Mobile (≤ 480px) */
+@media (max-width: 480px) {
+    .comparison-page { padding: 0.75rem 0.75rem 1.5rem; }
+
+    .comp-header { gap: 0.5rem; }
+    .header-left { gap: 0.5rem; }
+    .header-left h1 { font-size: 0.95rem; }
+    .badge { display: none; }
+
+    .verdict-card { padding: 1.1rem; }
+    .verdict-card h3 { font-size: 1rem; }
+
+    /* Algorithm table: horizontal scroll */
+    .algo-section   { padding: 1rem 0.75rem; }
+    .algo-table     { font-size: 0.78rem; min-width: 460px; }
+    .algo-table th,
+    .algo-table td  { padding: 0.5rem 0.6rem; }
+
+    /* Charts */
+    .charts-section { padding: 1rem 0.75rem; }
+    .chart-card canvas { max-height: 180px; }
+
+    /* Sizes section */
+    .sizes-section { padding: 1rem 0.75rem; }
+
+    /* Buttons */
+    .btn { padding: 0.6rem 1rem; font-size: 0.82rem; }
+}

@@ -440,12 +440,53 @@ body {
 /* =====================================================
    RESPONSIVE
    ===================================================== */
+
+/* iPad / Small Laptop (≤ 1024px) */
 @media (max-width: 1024px) {
-    .login-page { flex-direction: column; }
-    .login-left { flex: none; border-right: none; border-bottom: 1px solid var(--border-primary); }
-    .login-right { min-height: 50vh; }
+    .login-page  { flex-direction: column; }
+    .login-left  { flex: none; width: 100%; border-right: none; border-bottom: 1px solid var(--border-primary); padding: 2.5rem 2rem; }
+    .login-right { min-height: 50vh; padding: 2rem; }
 }
-@media (max-width: 640px) {
-    .login-left { padding: 2rem 1.5rem; }
-    .login-right { padding: 1.5rem; }
+
+/* Tablet (≤ 768px) */
+@media (max-width: 768px) {
+    .login-left  { padding: 2rem 1.5rem; }
+    .login-right { padding: 1.5rem; min-height: 40vh; }
+
+    .login-brand h1    { font-size: 1.3rem; }
+    .login-subtitle    { font-size: 0.85rem; }
+
+    .post-login-actions { flex-direction: column; align-items: stretch; }
+    .post-login-btn     { max-width: 100%; }
+
+    .summary-grid { grid-template-columns: 1fr 1fr; }
+
+    .flow-header h2 { font-size: 1rem; }
+}
+
+/* Mobile (≤ 480px) */
+@media (max-width: 480px) {
+    .login-left  { padding: 1.5rem 1rem; }
+    .login-right { padding: 1.25rem 1rem; }
+
+    .login-brand h1    { font-size: 1.2rem; }
+    .login-header      { margin-bottom: 1.75rem; }
+    .protocol-badge    { font-size: 0.7rem; padding: 0.3rem 0.65rem; margin-bottom: 1rem; }
+
+    .kemtls-info-box   { font-size: 0.72rem; padding: 8px 10px; }
+
+    .login-form  { gap: 1rem; }
+    .form-group input  { font-size: 0.85rem; padding: 0.6rem 0.75rem; }
+    .login-btn   { font-size: 0.85rem; }
+
+    .crypto-info { gap: 0.75rem; }
+    .crypto-chip { font-size: 0.65rem; }
+
+    .post-login-actions { margin-top: 1rem; }
+    .post-login-btn     { font-size: 0.82rem; padding: 0.6rem 1rem; }
+
+    .summary-grid { grid-template-columns: 1fr; }
+    .detail-val   { max-width: 160px; }
+
+    .login-theme-toggle { top: 1rem; right: 1rem; }
 }

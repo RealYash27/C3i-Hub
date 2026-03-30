@@ -98,41 +98,90 @@
 
         <!-- Architecture Preview -->
         <section class="arch-section">
-            <h3><i class="fas fa-diagram-project"></i> System Architecture</h3>
-            <div class="arch-flow">
-                <div class="arch-node">
-                    <i class="fas fa-user"></i>
-                    <span>Client</span>
+            <div class="arch-header" style="text-align: center; margin-bottom: 2.5rem;">
+                <h3 style="justify-content: center; font-size: 1.25rem;"><i class="fas fa-network-wired"></i> System Architecture Flow</h3>
+                <p style="color: var(--text-muted); font-size: 0.95rem; margin-top: 0.2rem;">End-to-End Post-Quantum Secure OpenID Connect Infrastructure</p>
+            </div>
+            
+            <div class="infra-wrapper">
+                <!-- Zone 1: Client -->
+                <div class="infra-zone">
+                    <div class="zone-label">External Network</div>
+                    <div class="infra-box primary-box">
+                        <i class="fas fa-desktop"></i>
+                        <div class="box-text">
+                            <span class="box-title">Client App</span>
+                            <span class="box-desc">OIDC Relying Party</span>
+                        </div>
+                    </div>
                 </div>
-                <div class="arch-arrow">
-                    <div class="arrow-line"></div>
-                    <span>KEMTLS Channel</span>
+
+                <!-- Network connection 1 -->
+                <div class="infra-connection">
+                    <div class="connection-label top">Encapsulate</div>
+                    <div class="animated-line"></div>
+                    <div class="connection-label bottom">OIDC Req</div>
                 </div>
-                <div class="arch-node highlight">
-                    <i class="fas fa-server"></i>
-                    <span>OIDC Server</span>
+
+                <!-- Zone 2: Transport Layer -->
+                <div class="infra-zone secure-zone">
+                    <div class="zone-label kemtls-label"><i class="fas fa-shield-alt"></i> KEMTLS Secure Tunnel</div>
+                    <div class="tunnel-stack">
+                        <div class="stack-item">
+                            <i class="fas fa-cube"></i>
+                            <div class="stack-text">
+                                <span>Key Exchange</span>
+                                <strong>ML-KEM-768</strong>
+                            </div>
+                        </div>
+                        <div class="stack-item">
+                            <i class="fas fa-signature"></i>
+                            <div class="stack-text">
+                                <span>Identity Auth</span>
+                                <strong>ML-DSA-65</strong>
+                            </div>
+                        </div>
+                        <div class="stack-item">
+                            <i class="fas fa-lock"></i>
+                            <div class="stack-text">
+                                <span>Encryption</span>
+                                <strong>AES-256-GCM</strong>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="arch-arrow">
-                    <div class="arrow-line"></div>
-                    <span>PQ Signatures</span>
+
+                <!-- Network connection 2 -->
+                <div class="infra-connection">
+                    <div class="connection-label top">Decapsulate</div>
+                    <div class="animated-line"></div>
+                    <div class="connection-label bottom">JWT Token</div>
                 </div>
-                <div class="arch-node">
-                    <i class="fas fa-key"></i>
-                    <span>Token Service</span>
+
+                <!-- Zone 3: Server -->
+                <div class="infra-zone">
+                    <div class="zone-label">Internal Network</div>
+                    <div class="infra-box primary-box">
+                        <i class="fas fa-server"></i>
+                        <div class="box-text">
+                            <span class="box-title">OIDC Provider</span>
+                            <span class="box-desc">QuantumShield Core</span>
+                        </div>
+                    </div>
+                    <div class="infra-db">
+                        <i class="fas fa-database"></i> Secure Token Directory
+                    </div>
                 </div>
             </div>
+
             <div class="arch-footer">
                 <div class="arch-stat">
-                    <span class="stat-val">NIST Level 3</span>
-                    <span class="stat-label">Security</span>
+                    <span class="stat-val">FIPS 203 & 204</span>
+                    <span class="stat-label">NIST Standards</span>
                 </div>
                 <div class="arch-stat">
-                    <span class="stat-val">&lt;1ms</span>
-                    <span class="stat-label">Handshake</span>
-                </div>
-                <div class="arch-stat">
-                    <span class="stat-val">FIPS 203/204</span>
-                    <span class="stat-label">Standards</span>
+                    <span class="stat-val">PDK Extensions</span>
+                    <span class="stat-label">Fast Auth</span>
                 </div>
                 <div class="arch-stat">
                     <span class="stat-val">Zero Classical</span>

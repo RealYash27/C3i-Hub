@@ -29,6 +29,10 @@
                 <h1><i class="fas fa-shield-halved"></i> QuantumShield</h1>
             </div>
             <div class="header-right">
+                <!-- Hamburger — only visible on mobile/tablet -->
+                <button class="sidebar-toggle" id="sidebarToggle" onclick="toggleSidebar()" title="Menu" aria-label="Toggle sidebar">
+                    <i class="fas fa-bars"></i>
+                </button>
                 <div class="connection-status" id="connectionStatus">
                     <i class="fas fa-circle"></i>
                     <span>Connecting...</span>
@@ -52,6 +56,8 @@
             </div>
         </header>
 
+        <!-- Sidebar backdrop (mobile overlay) -->
+        <div class="sidebar-backdrop" id="sidebarBackdrop" onclick="toggleSidebar()"></div>
         <div class="dashboard-content">
             <!-- Modern Sidebar -->
             <aside class="sidebar">
@@ -422,6 +428,24 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="/static/particles.js"></script>
     <script src="/static/dashboard.js"></script>
+    <script>
+        /* Mobile sidebar toggle — layout only, no crypto touched */
+        function toggleSidebar() {
+            document.querySelector('.sidebar').classList.toggle('sidebar-open');
+            document.getElementById('sidebarBackdrop').classList.toggle('active');
+            document.body.classList.toggle('sidebar-is-open');
+        }
+        /* Close sidebar when a nav item is clicked on mobile */
+        document.querySelectorAll('.nav-item').forEach(function(item) {
+            item.addEventListener('click', function() {
+                if (window.innerWidth <= 1024) {
+                    document.querySelector('.sidebar').classList.remove('sidebar-open');
+                    document.getElementById('sidebarBackdrop').classList.remove('active');
+                    document.body.classList.remove('sidebar-is-open');
+                }
+            });
+        });
+    </script>
 </body>
 
 </html>
