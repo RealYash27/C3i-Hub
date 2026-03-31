@@ -244,9 +244,22 @@ body {
 
 /* Footer */
 .login-footer { margin-top: 2rem; padding-top: 1.25rem; border-top: 1px solid var(--border-secondary); }
-.crypto-info { display: flex; gap: 1.5rem; flex-wrap: wrap; }
-.crypto-chip { display: flex; align-items: center; gap: .35rem; font-size: .7rem; font-weight: 500; color: var(--text-tertiary); }
-.crypto-chip i { color: var(--green-500); font-size: .55rem; }
+.crypto-info { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 0.8rem; }
+.crypto-chip {
+    font-size: 0.7rem; font-weight: 500; padding: 0.25rem 0.6rem;
+    background: var(--bg-tertiary); border: 1px solid var(--border-primary);
+    border-radius: 6px; color: var(--text-tertiary);
+    display: flex; align-items: center; gap: 0.25rem;
+}
+.crypto-chip.accent {
+    background: var(--accent-bg); color: var(--accent);
+    border-color: rgba(37,99,235,0.25);
+}
+[data-theme="dark"] .crypto-chip.accent {
+    background: var(--accent-bg-dark); color: var(--accent-dark);
+    border-color: rgba(59,130,246,0.3);
+}
+.crypto-chip i { font-size: 0.4rem; }
 
 /* Post-login action buttons — match existing .login-btn style */
 .post-login-actions {

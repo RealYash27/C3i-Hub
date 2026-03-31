@@ -434,66 +434,70 @@ body {
 
 /* ── Tablet (769px – 950px) ── */
 @media (max-width: 768px) {
-    .landing-wrapper { padding: 1.5rem 1rem 2rem; }
+    .landing-page { padding: 0 1.5rem 2rem; }
 
-    .hero { padding: 2.5rem 1rem 1.5rem; }
-    .hero h1 { font-size: 1.75rem; }
+    .landing-header { flex-direction: column; gap: 1.5rem; justify-content: center; text-align: center; }
+    .brand { justify-content: center; width: 100%; }
+    .landing-nav { flex-wrap: wrap; justify-content: center; width: 100%; }
+
+    .hero { padding: 2rem 1rem 1.5rem; }
+    .hero h1 { font-size: 2rem; }
     .hero p  { font-size: 0.95rem; }
 
-    .mode-cards { gap: 1rem; padding: 0 0.5rem; }
-    .mode-card  { padding: 1.5rem 1.25rem; max-width: 100%; }
+    .mode-cards { gap: 1.25rem; padding: 0; }
+    .mode-card  { padding: 1.5rem 1.25rem; width: 100%; max-width: none; }
 
-    .arch-section { padding: 1.5rem 1rem; margin: 1.5rem auto; }
+    .arch-section { padding: 1.5rem 1rem; margin: 1.5rem auto; box-sizing: border-box; }
     .infra-zone   { max-width: 100%; }
 
-    .arch-footer { gap: 1.5rem; }
+    .arch-footer { gap: 1.5rem; flex-wrap: wrap; justify-content: center; }
     .stat-val    { font-size: 0.9rem; }
 }
 
 /* ── Mobile (≤ 480px) ── */
 @media (max-width: 480px) {
-    .landing-wrapper { padding: 1rem 0.75rem 2rem; }
+    .landing-page { padding: 0 0.75rem 1.5rem; overflow-x: hidden; width: 100%; box-sizing: border-box; }
 
-    .hero { padding: 2rem 0.75rem 1rem; }
-    .hero h1 { font-size: 1.45rem; line-height: 1.25; }
-    .hero p  { font-size: 0.87rem; }
+    .landing-header { padding: 1rem 0; gap: 1.25rem; }
+    .brand { font-size: 1.1rem; flex-wrap: wrap; justify-content: center; text-align: center; }
+    
+    .landing-nav { gap: 0.75rem; width: 100%; padding: 0; }
+    .landing-nav a { font-size: 0.85rem; }
 
-    /* Nav */
-    .landing-nav { padding: 0.75rem 1rem; flex-wrap: wrap; gap: 0.5rem; }
-    .nav-brand span { font-size: 0.9rem; }
-    .nav-actions { gap: 0.5rem; }
-    .nav-actions .btn { padding: 0.35rem 0.75rem; font-size: 0.78rem; }
+    .hero { padding: 1rem 0; margin: 1rem auto; max-width: 100%; }
+    .hero h1 { font-size: 1.6rem; line-height: 1.25; }
+    .hero-sub  { font-size: 0.85rem; padding: 0 0.5rem; }
 
-    /* Mode cards */
-    .mode-cards { padding: 0; }
-    .mode-card  { padding: 1.25rem 1rem; }
-    .mode-card h2 { font-size: 1.1rem; }
-    .mode-card p  { font-size: 0.82rem; }
-    .vs-divider   { font-size: 0.8rem; padding: 0.3rem 0.6rem; }
+    .mode-cards { margin: 1rem auto; padding: 0; width: 100%; }
+    .mode-card  { padding: 1.25rem 1rem; width: 100%; box-sizing: border-box; }
+    .mode-card h2 { font-size: 1.2rem; }
+    .card-desc  { font-size: 0.82rem; margin-bottom: 1rem; }
+    .vs-divider   { font-size: 0.9rem; padding: 0.3rem; margin: 0.5rem 0; }
 
-    /* Algo chips */
-    .algo-chip { font-size: 0.65rem; padding: 0.2rem 0.5rem; }
+    .card-algorithms { gap: 0.4rem; justify-content: flex-start; }
+    .algo-chip { font-size: 0.7rem; padding: 0.25rem 0.5rem; }
 
-    /* Architecture section */
-    .arch-section { padding: 1.25rem 0.75rem; margin: 1rem auto; }
+    .arch-section { padding: 1.25rem 0.75rem; margin: 1.5rem auto 1rem; width: 100%; box-sizing: border-box; border-radius: 12px; }
     .arch-header { margin-bottom: 1.5rem !important; }
-    .arch-header h3 { font-size: 1.05rem !important; }
-
-    .infra-zone  { padding: 1.2rem 0.75rem; }
-    .zone-label  { font-size: 0.65rem; padding: 3px 10px; }
-    .infra-box   { padding: 1rem 0.75rem; }
+    .arch-header h3 { font-size: 1.1rem !important; }
+    
+    .infra-wrapper { gap: 1rem; padding: 0; width: 100%; }
+    .infra-zone  { padding: 1.5rem 0.75rem 1rem; width: 100%; box-sizing: border-box; }
+    
+    .zone-label  { font-size: 0.65rem; padding: 3px 10px; text-align: center; max-width: 90%; white-space: normal; }
+    .infra-box   { padding: 1rem 0.5rem; width: 100%; box-sizing: border-box; }
     .box-title   { font-size: 0.9rem; }
     .box-desc    { font-size: 0.75rem; }
-    .stack-item  { padding: 0.5rem 0.7rem; gap: 0.6rem; }
-    .stack-text strong { font-size: 0.8rem; }
-    .infra-db    { font-size: 0.75rem; }
+    
+    .tunnel-stack { gap: 0.4rem; width: 100%; }
+    .stack-item  { padding: 0.5rem; gap: 0.5rem; width: 100%; box-sizing: border-box; }
+    .stack-text strong { font-size: 0.75rem; white-space: normal; word-break: break-word; }
+    .infra-db    { font-size: 0.75rem; padding: 0.6rem; margin-top: 0.6rem; width: 100%; box-sizing: border-box; }
 
-    /* Arch footer stats — 3-col single row */
-    .arch-footer  { gap: 1rem; margin-top: 1.25rem; }
+    .arch-footer  { gap: 1rem; margin-top: 1.5rem; flex-direction: column; align-items: center; }
     .stat-val     { font-size: 0.85rem; }
     .stat-label   { font-size: 0.65rem; }
 
-    /* Footer */
-    .landing-footer { font-size: 0.72rem; padding: 1rem; }
+    .landing-footer { font-size: 0.72rem; padding: 1rem 0; text-align: center; }
 }
 
