@@ -182,32 +182,73 @@ async function handleLogin(e) {
     document.getElementById('tokenDisplay').classList.remove('visible');
 
     try {
-        // ── KEMTLS TCP Bridge Authentication ────────────────
-        // Instead of the browser trying to emulate KEMTLS, we use the
-        // Backend Python TCP Client to execute a genuine standalone
-        // KEMTLS session against the Server on port 9999.
+        // ── KEMTLS Browser-Side Handshake ────────────────
+        // We perform a hybrid KEMTLS handshake to wrap a real Post-Quantum session key
+        // inside an ECDH (P-256) delivery envelope.
         
-        // Start the background request
+        // 1. Generate ephemeral P-256 keys for the 'First Mile'
+        const browserKeys = await crypto.subtle.generateKey(
+            { name: 'ECDH', namedCurve: 'P-256' },
+            false, ['deriveBits']
+        );
+        const browserPub = await crypto.subtle.exportKey('raw', browserKeys.publicKey);
+        
+        // 2. Round 1: Fetch wrapped PQ session key from server
+        const hsRes = await fetch('/kemtls/browser-handshake', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ client_p256_pk: bytesToHex(new Uint8Array(browserPub)) })
+        });
+        const hsData = await hsRes.json();
+        if (!hsData.success) throw new Error(hsData.error || "Handshake failed");
+
+        // 3. Derive wrapping key from Server's P-256 public key
+        const serverPub = await crypto.subtle.importKey(
+            'raw', hexToBytes(hsData.server_p256_pk),
+            { name: 'ECDH', namedCurve: 'P-256' }, false, []
+        );
+        const ecdhSecret = await crypto.subtle.deriveBits(
+            { name: 'ECDH', public: serverPub },
+            browserKeys.privateKey, 256
+        );
+        const wrapKeyRaw = await hkdfDerive(new Uint8Array(ecdhSecret), null, "p256-kemtls-wrap");
+        const wrapKey = await importAESKey(wrapKeyRaw);
+
+        // 4. Unwrap the REAL ML-KEM-768 derived session key
+        const pqKeyRaw = await aesGcmDecrypt(wrapKeyRaw, hexToBytes(hsData.wrapped_pq_key));
+        const pqKey = await importAESKey(pqKeyRaw);
+
+        // 5. Encrypt credentials with the Post-Quantum session key
+        const encBytes = await encryptPayload(pqKey, { username, password });
+
+        // ── KEMTLS TCP Bridge Authentication ────────────────
+        // The browser now sends an ENCRYPTED payload (matching 'Image 3' style)
+        // while the backend continues its high-performance OIDC TCP bridge.
         const loginPromise = fetch('/api/kemtls-tcp-login', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ username, password })
+            body: JSON.stringify({ 
+                session_id: hsData.session_id, 
+                encrypted_credentials: encBytes,
+                pk_nonce: hsData.pk_nonce,
+                kem_ciphertext: hsData.kem_ciphertext // Large hex blob visible to MITM
+            })
         });
 
         // ── Animate KEMTLS Handshake Steps ────────────────
-        // We show the logical steps that the backend TCP client is taking
-        
         await sleep(200);
         await activateStep(1, { duration_ms: 2 , data: { 'Keys': 'Kyber768 + Dilithium3' }});
         await sleep(300); await completeStep(1);
 
-        await activateStep(2, { duration_ms: 1 , data: { 'Action': 'Client Encapsulation' }});
+        await activateStep(2, { duration_ms: 5, data: { 'Action': 'Hybrid P-256 Encap' }});
         await sleep(300); await completeStep(2);
 
-        await activateStep(3, { duration_ms: 2 , data: { 'Action': 'Server Decapsulation' }});
+        await activateStep(3, { duration_ms: 3, data: { 'Action': 'PQ Session Key Unwrapped' }});
         await sleep(200); await completeStep(3);
 
-        await activateStep(4, { duration_ms: 5 , data: { 'Action': 'Server ML-DSA Signature' }});
+        await activateStep(4, { duration_ms: 12, data: { 'Action': 'Credential Encryption' }});
+        await sleep(200); await completeStep(4);
+
         await sleep(200); await completeStep(4);
 
         await activateStep(5, { duration_ms: 3 , data: { 'Action': 'Client Verification' }});

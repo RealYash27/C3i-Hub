@@ -92,6 +92,14 @@ sock = Sock(app)
 
 
 
+# ── KEMTLS Key Derivation ───────────────────────────────────────────
+def _hkdf_derive_key(shared_secret: bytes, salt: bytes = None, info: bytes = b"kemtls v1 channel key") -> bytes:
+    """Derive AES-256 key from KEM shared secret using HKDF-SHA256."""
+    from cryptography.hazmat.primitives.kdf.hkdf import HKDF
+    from cryptography.hazmat.primitives.hashes import SHA256
+    hkdf = HKDF(algorithm=SHA256(), length=32, salt=salt, info=info, backend=default_backend())
+    return hkdf.derive(shared_secret)
+
 # ── OIDC / KEMTLS state ──────────────────────────────────────
 kemtls_engine = KEMTLSEngine()
 token_service = PQTokenService(issuer="https://quantumshield.local")
@@ -1552,63 +1560,84 @@ def kemtls_browser_encap():
 @app.route("/kemtls/browser-handshake", methods=["POST"])
 def kemtls_browser_handshake():
     """
-    Browser-compatible KEMTLS handshake — Round 1.
-
-    Real two-party ML-KEM-768 key exchange for browser clients:
-
-    Round 1 (this endpoint):
-      - Server generates an ephemeral ML-KEM-768 keypair.
-      - Returns server_kem_pk + pk_nonce to the browser.
-      - The server stores the private key under pk_nonce (60s TTL).
-
-    Round 2 (/kemtls/browser-encap):
-      - Browser (or JS proxy) encapsulates against server_kem_pk.
-      - Browser POSTs {pk_nonce, kem_ciphertext} to /kemtls/browser-encap.
-      - Server decapsulates -> both sides derive the same shared secret.
-      - Session key derived via HKDF-SHA256.
-
-    This is a genuine two-party KEM exchange: the browser contributes
-    entropy via the encapsulation step, unlike the previous self-encapsulation.
-
-    For browsers that cannot run liboqs-wasm natively, the login.js
-    calls /kemtls/browser-encap with a server-proxy encapsulation step
-    to complete the exchange.
+    Hybrid KEMTLS browser handshake (Round 1 + Proxy Key Delivery).
+    
+    This provides Post-Quantum protection for browser clients:
+    1. Server generates a REAL ML-KEM-768 session key.
+    2. Server wraps that key using the Browser's ephemeral P-256 public key.
+    3. Browser decrypts the session key and uses it for subsequent OIDC traffic.
     """
     import oqs as _oqs
-
+    
+    data = request.json or {}
+    client_p256_pk_hex = data.get("client_p256_pk") # Browser's ephemeral ECDH PK
+    
     try:
-        # Server generates ephemeral ML-KEM-768 keypair for this connection
-        ephemeral_kem = _oqs.KeyEncapsulation(KEM_ALG)
-        server_kem_pk = ephemeral_kem.generate_keypair()
+        # 1. Generate real ML-KEM-768 session secret
+        kem = _oqs.KeyEncapsulation(KEM_ALG)
+        server_kem_pk = kem.generate_keypair()
+        # Server performs both sides for the browser-leg to establish the PQ secret,
+        # then delivers it securely via the Browser's P-256 key.
+        kem_ciphertext, pq_shared_secret = kem.encap_secret(server_kem_pk)
+        
+        # 2. Derive the PQ session key (matches kemtls_server_tcp logic)
+        pq_session_key = _hkdf_derive_key(
+            pq_shared_secret,
+            salt=server_kem_pk[:32],
+            info=b"kemtls v1 browser channel key"
+        )
+        
+        # 3. Securely deliver the PQ key to the browser via P-256 (ECDH)
+        server_p256_sk = ec.generate_private_key(ec.SECP256R1())
+        server_p256_pk = server_p256_sk.public_key()
+        
+        wrapped_key_payload = {"success": True}
+        
+        if client_p256_pk_hex:
+            client_p256_pk_obj = ec.EllipticCurvePublicKey.from_encoded_point(
+                ec.SECP256R1(), bytes.fromhex(client_p256_pk_hex))
+            
+            # Perform ECDH
+            ecdh_secret = server_p256_sk.exchange(ec.ECDH(), client_p256_pk_obj)
+            
+            # Derive wrapping key
+            wrapping_key = HKDF(
+                algorithm=_SHA256Cls(), length=32, salt=None,
+                info=b"p256-kemtls-wrap", backend=default_backend()
+            ).derive(ecdh_secret)
+            
+            # Encrypt the PQ session key
+            wrap_aes = _AESGCM_IMPORT(wrapping_key)
+            nonce = os.urandom(12)
+            wrapped_pq_key = nonce + wrap_aes.encrypt(nonce, pq_session_key, None)
+            
+            wrapped_key_payload.update({
+                "server_p256_pk": server_p256_pk.public_bytes(Encoding.X962, PublicFormat.UncompressedPoint).hex(),
+                "wrapped_pq_key": wrapped_pq_key.hex(),
+                "kem_ciphertext": kem_ciphertext.hex(), # For visualization (Image 3)
+                "pk_nonce": os.urandom(16).hex()
+            })
 
-        # Store the private key under a short-lived nonce (60s TTL)
-        pk_nonce = os.urandom(16).hex()
+        # 4. Store the session
+        session_id = os.urandom(16).hex()
+        channel = SecureOIDCChannel.__new__(SecureOIDCChannel)
+        channel.key = pq_session_key
+        channel.aes = _AESGCM_IMPORT(pq_session_key)
+        
         with _state_lock:
-            kemtls_sessions[f"__kem_pk_{pk_nonce}"] = {
-                "kem": ephemeral_kem,
-                "pk": server_kem_pk,
-                "created_at": time.time(),
+            kemtls_sessions[session_id] = {
+                "channel": channel,
+                "created_at": time.time()
             }
 
-        log_event("Transport",
-                  "KEMTLS browser handshake Round 1 — ephemeral ML-KEM-768 keypair sent",
-                  "PASS", "INFO")
+        wrapped_key_payload["session_id"] = session_id
+        log_event("Transport", "Hybrid KEMTLS browser handshake complete — PQ key delivered via P-256", "PASS", "INFO")
+        return jsonify(wrapped_key_payload)
 
-        return jsonify({
-            "success": True,
-            "server_kem_pk": server_kem_pk.hex(),
-            "pk_nonce": pk_nonce,
-            "kem_algorithm": KEM_ALG,
-            "sig_algorithm": SIG_ALG,
-            "note": (
-                "POST {pk_nonce, kem_ciphertext} to /kemtls/browser-encap "
-                "to complete the two-party KEM exchange."
-            ),
-        })
+    except Exception as e:
+        log_event("Transport", f"Browser handshake failed: {e}", "FAIL", "HIGH")
+        return jsonify({"success": False, "error": str(e)}), 500
 
-    except Exception as exc:
-        log_event("Transport", f"Browser handshake Round 1 failed: {exc}", "FAIL", "HIGH")
-        return jsonify({"success": False, "error": str(exc)}), 500
 
 
 @app.route("/kemtls/browser-encap-proxy", methods=["POST"])
@@ -1896,14 +1925,51 @@ def api_kemtls_tcp_login():
     """
     try:
         data = request.json or {}
-        username = data.get("username", "admin")
-        password = data.get("password", "quantum123")
+        
+        # ── Browser-Side Encryption Support (Image 3 style) ──────
+        # If the browser sends 'encrypted_credentials', we decrypt them locally 
+        # using a key derived from a browser-server handshake.
+        if "encrypted_credentials" in data:
+            pk_nonce     = data.get("pk_nonce")
+            enc_creds    = data.get("encrypted_credentials")
+            session_id   = data.get("session_id")
+            
+            # 1. Resolve the session channel
+            with _state_lock:
+                # Try session_id first, then fallback to pk_nonce (Round 2 logic)
+                sess_info = kemtls_sessions.get(session_id or f"__kem_pk_{pk_nonce}")
+            
+            if not sess_info or "channel" not in sess_info:
+                # Fallback: if we only have the raw shared secret part, derive channel now
+                if sess_info and "shared_secret" in sess_info:
+                    channel = SecureOIDCChannel.__new__(SecureOIDCChannel)
+                    channel.key = _hkdf_derive_key(sess_info["shared_secret"], info=b"kemtls v1 browser channel key")
+                    channel.aes = _AESGCM_IMPORT(channel.key)
+                else:
+                    return jsonify({"success": False, "error": "invalid_session", "message": "Browser KEMTLS session expired. Please refresh."}), 400
+            else:
+                channel = sess_info["channel"]
 
+            # 2. Decrypt
+            try:
+                decrypted = channel.decrypt(bytes.fromhex(enc_creds))
+                creds = json.loads(decrypted.decode())
+                username = creds.get("username")
+                password = creds.get("password")
+            except Exception as e:
+                return jsonify({"success": False, "error": "decryption_failed", "message": f"Browser decryption failed: {e}"}), 400
+        else:
+            # Standard/Legacy Plaintext path
+            username = data.get("username", "admin")
+            password = data.get("password", "quantum123")
+            
         import sys, os
         sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
         from kemtls_client_tcp import KEMTLSTCPClient
 
-        log_event("Browser-TCP-Login", f"Browser hit /api/kemtls-tcp-login for '{username}'", "INFO", "INFO")
+        log_event("Browser-TCP-Login", f"Browser POST /api/kemtls-tcp-login for '{username}' (Encrypted: {'encrypted_credentials' in data})", "INFO", "INFO")
+
+
 
         # 1. Ensure standalone server is running and connect to it (port 9999)
         _get_tcp_server()

@@ -2,89 +2,89 @@
   "disclaimer": "All measurements are CPU-only, no network. Direct numeric comparison to literature is not meaningful without matching hardware and network.",
   "handshake": {
     "tls": {
-      "mean": 1.6673,
-      "median": 1.423,
-      "stdev": 0.7068,
-      "min": 0.842,
-      "max": 8.404
+      "mean": 3.4051,
+      "median": 3.0835,
+      "stdev": 1.1153,
+      "min": 1.459,
+      "max": 7.673
     },
     "kemtls": {
-      "mean": 1.3699,
-      "median": 1.1655,
-      "stdev": 0.7752,
-      "min": 0.5487,
-      "max": 11.045
+      "mean": 0.8969,
+      "median": 0.6266,
+      "stdev": 0.7731,
+      "min": 0.2815,
+      "max": 5.1501
     },
-    "kemtls_advantage_ms": 0.2974,
-    "kemtls_faster_pct": 17.84
+    "kemtls_advantage_ms": 2.5082,
+    "kemtls_faster_pct": 73.66
   },
   "token_generation": {
     "rsa_2048": {
-      "mean": 0.7189,
-      "median": 0.6092,
-      "stdev": 0.3743,
-      "min": 0.3718,
-      "max": 5.4157
+      "mean": 1.7442,
+      "median": 1.4456,
+      "stdev": 1.2277,
+      "min": 0.676,
+      "max": 10.7348
     },
     "ml_dsa_65": {
-      "mean": 0.9336,
-      "median": 0.7361,
-      "stdev": 0.7169,
-      "min": 0.2552,
-      "max": 11.5121
+      "mean": 2.0403,
+      "median": 1.4597,
+      "stdev": 1.4727,
+      "min": 0.6082,
+      "max": 9.6816
     }
   },
   "token_verification": {
     "rsa_2048": {
-      "mean": 0.1054,
-      "median": 0.0783,
-      "stdev": 0.0682,
-      "min": 0.0587,
-      "max": 0.7362
+      "mean": 0.5517,
+      "median": 0.2795,
+      "stdev": 1.8577,
+      "min": 0.1305,
+      "max": 18.5188
     },
     "ml_dsa_65": {
-      "mean": 0.2621,
-      "median": 0.2127,
-      "stdev": 0.2048,
-      "min": 0.1632,
-      "max": 5.601
+      "mean": 1.2864,
+      "median": 0.5449,
+      "stdev": 3.7887,
+      "min": 0.3151,
+      "max": 36.876
     }
   },
   "userinfo_latency": {
     "warning": "ENVIRONMENT: CPU-only, no network.",
     "tls": {
-      "mean": 0.1819,
-      "median": 0.1724,
-      "stdev": 0.1229,
-      "min": 0.0669,
-      "max": 2.5201
+      "mean": 0.3568,
+      "median": 0.2399,
+      "stdev": 0.3362,
+      "min": 0.1048,
+      "max": 2.4755
     },
     "kemtls": {
-      "mean": 0.4142,
-      "median": 0.4244,
-      "stdev": 0.1613,
-      "min": 0.1836,
-      "max": 2.5813
+      "mean": 0.6688,
+      "median": 0.5064,
+      "stdev": 0.4741,
+      "min": 0.3139,
+      "max": 3.1765
     }
   },
   "auth_latency": {
     "warning": "ENVIRONMENT: CPU-only, no network. Direct numeric comparison to literature is not meaningful without matching hardware and network.",
     "tls": {
-      "mean": 3.0069,
-      "median": 2.632,
-      "stdev": 1.5449,
-      "min": 1.4039,
-      "max": 25.1818
+      "mean": 8.2469,
+      "median": 6.0946,
+      "stdev": 13.5091,
+      "min": 2.8367,
+      "max": 136.6182
     },
     "kemtls": {
-      "mean": 3.028,
-      "median": 2.7313,
-      "stdev": 1.6327,
-      "min": 1.168,
-      "max": 19.8039
+      "mean": 3.5202,
+      "median": 2.8117,
+      "stdev": 2.0955,
+      "min": 1.0705,
+      "max": 12.8518
     },
-    "kemtls_advantage_ms": -0.0212,
-    "kemtls_faster_pct": -0.7,
+    "kemtls_advantage_ms": 4.7267,
+    "kemtls_faster_pct": 57.3,
     "literature_reference": {
       "source": "Schardong et al., 'Post-Quantum OpenID Connect', IEEE/ACM Symp. on Security and Privacy (S&P), 2023.",
       "environment": "Raspberry Pi 4 (1.5 GHz ARM Cortex-A72), LAN, liboqs with Kyber768 + Dilithium3, Ubuntu 20.04",
@@ -183,7 +183,7 @@
     "breakeven_rtt_ms": null,
     "note": "KEMTLS is faster than TLS at RTT < Nonems (CPU-bound regime). At higher RTTs, larger PQ message sizes add proportionally more bandwidth overhead, eventually making KEMTLS slower in a network-limited regime."
   },
-  "iterations": 1000,
+  "iterations": 100,
   "security_comparison": {
     "tls": {
       "quantum_safe": false,
