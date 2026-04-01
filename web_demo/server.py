@@ -1562,6 +1562,10 @@ def kemtls_browser_handshake():
     """
     Hybrid KEMTLS browser handshake (Round 1 + Proxy Key Delivery).
     
+    [SECURITY NOTICE] This route uses a Hybrid P-256 + ML-KEM-768 
+    approach strictly for browser-compatibility in the web demo.
+    The native TCP KEMTLS bridge (Port 9999) remains 100% PQ-Secure.
+    
     This provides Post-Quantum protection for browser clients:
     1. Server generates a REAL ML-KEM-768 session key.
     2. Server wraps that key using the Browser's ephemeral P-256 public key.

@@ -91,6 +91,8 @@ QuantumShield/
 
 5. **Bidirectional Channel Binding**: The implementation includes a `CLIENT_FINISHED` MAC, ensuring that both parties have established the same channel key and that the client's identity (if mutual auth is used) is also bound to the session.
 
+6. **Hybrid Browser Handshake (Demo Only)**: To provide encrypted visibility in standard browsers (which lack native ML-KEM support), the web dashboard uses a hybrid P-256 + ML-KEM-768 "envelope" for credential delivery. This is a transition layer for the **'First Mile'** demo only. The true backend OIDC transport (`kemtls_server_tcp.py`) is **100% Post-Quantum** with zero classical dependencies.
+
 ## References
 
 1. P. Schwabe, D. Stebila, T. Wiggers, "KEMTLS: Building TLS with Key Encapsulation Mechanisms," *IACR Cryptology ePrint Archive*, Report 2020/534, 2020.
