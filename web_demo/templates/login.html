@@ -5,18 +5,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login · QuantumShield Post-Quantum OIDC</title>
-    <meta name="description" content="Post-Quantum Secure OpenID Connect login powered by KEMTLS with ML-KEM-768 and ML-DSA-65">
+    <meta name="description"
+        content="Post-Quantum Secure OpenID Connect login powered by KEMTLS with ML-KEM-768 and ML-DSA-65">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="/static/login.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 
 <body>
     <script>
-        (function(){
+        (function () {
             var t = localStorage.getItem('quantumshield-theme') || localStorage.getItem('theme') || 'light';
             document.documentElement.setAttribute('data-theme', t);
         })();
@@ -88,7 +90,7 @@
             <div class="login-footer">
                 <div class="crypto-info">
                     <div class="crypto-chip accent"><i class="fas fa-circle"></i> ML-KEM-768</div>
-                    <div class="crypto-chip accent"><i class="fas fa-circle"></i> ML-DSA-65</div>
+                    <div class="crypto-chip accent"><i class="fas fa-circle"></i> ML-DSA-65 (OIDC tokens)</div>
                     <div class="crypto-chip accent"><i class="fas fa-circle"></i> AES-256-GCM</div>
                     <div class="crypto-chip accent"><i class="fas fa-circle"></i> NIST Level 3</div>
                 </div>
@@ -109,7 +111,8 @@
                         <i class="fas fa-shield-halved"></i>
                     </div>
                     <h3>Ready for Authentication</h3>
-                    <p>Click <strong>Sign In</strong> to start the KEMTLS handshake and observe the complete OIDC Authorization Code flow with post-quantum cryptography.</p>
+                    <p>Click <strong>Sign In</strong> to start the KEMTLS handshake and observe the complete OIDC
+                        Authorization Code flow with post-quantum cryptography.</p>
                 </div>
             </div>
 
@@ -123,7 +126,8 @@
                             KEMTLS: ServerHello
                             <span class="step-direction">server → client</span>
                         </div>
-                        <div class="step-desc">Server sends Kyber768 public key + ML-DSA-65nature key</div>
+                        <div class="step-desc">Server sends ML-KEM-768 long-term public key (no signature key — implicit
+                            auth)</div>
                         <div class="step-timing" id="timing-1"></div>
                         <div class="step-detail" id="detail-1"></div>
                     </div>
@@ -159,13 +163,14 @@
 
                 <!-- Step 4: Server Auth -->
                 <div class="flow-step" id="step-4" data-step="4">
-                    <div class="step-icon"><i class="fas fa-signature"></i></div>
+                    <div class="step-icon"><i class="fas fa-key"></i></div>
                     <div class="step-body">
                         <div class="step-name">
                             KEMTLS: Server Authentication
                             <span class="step-direction">server → client</span>
                         </div>
-                        <div class="step-desc">Server signs transcript with ML-DSA-65 (FIPS 204)</div>
+                        <div class="step-desc">Server proves identity by decapsulating client ciphertext (implicit KEM
+                            auth, no signature)</div>
                         <div class="step-timing" id="timing-4"></div>
                         <div class="step-detail" id="detail-4"></div>
                     </div>
@@ -239,7 +244,8 @@
 
             <!-- Token display -->
             <div class="token-display" id="tokenDisplay">
-                <h4><i class="fas fa-key"></i> ID Token (ML-DSA-65 signed JWT)</h4>
+                <h4><i class="fas fa-key"></i> OIDC ID Token — ML-DSA-65 signed JWT (post-handshake application layer)
+                </h4>
                 <div class="token-text" id="tokenText"></div>
             </div>
         </div>

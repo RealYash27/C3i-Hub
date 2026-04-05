@@ -185,14 +185,14 @@ async function handleLogin(e) {
         // ── KEMTLS Browser-Side Handshake ────────────────
         // We perform a hybrid KEMTLS handshake to wrap a real Post-Quantum session key
         // inside an ECDH (P-256) delivery envelope.
-        
+
         // 1. Generate ephemeral P-256 keys for the 'First Mile'
         const browserKeys = await crypto.subtle.generateKey(
             { name: 'ECDH', namedCurve: 'P-256' },
             false, ['deriveBits']
         );
         const browserPub = await crypto.subtle.exportKey('raw', browserKeys.publicKey);
-        
+
         // 2. Round 1: Fetch wrapped PQ session key from server
         const hsRes = await fetch('/kemtls/browser-handshake', {
             method: 'POST',
@@ -227,8 +227,8 @@ async function handleLogin(e) {
         const loginPromise = fetch('/api/kemtls-tcp-login', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ 
-                session_id: hsData.session_id, 
+            body: JSON.stringify({
+                session_id: hsData.session_id,
                 encrypted_credentials: encBytes,
                 pk_nonce: hsData.pk_nonce,
                 kem_ciphertext: hsData.kem_ciphertext // Large hex blob visible to MITM
@@ -237,21 +237,21 @@ async function handleLogin(e) {
 
         // ── Animate KEMTLS Handshake Steps ────────────────
         await sleep(200);
-        await activateStep(1, { duration_ms: 2 , data: { 'Keys': 'Kyber768 + Dilithium3' }});
+        await activateStep(1, { duration_ms: 2, data: { 'Keys': 'Kyber768 + Dilithium3' } });
         await sleep(300); await completeStep(1);
 
-        await activateStep(2, { duration_ms: 5, data: { 'Action': 'Hybrid P-256 Encap' }});
+        await activateStep(2, { duration_ms: 5, data: { 'Action': 'Hybrid P-256 Encap' } });
         await sleep(300); await completeStep(2);
 
-        await activateStep(3, { duration_ms: 3, data: { 'Action': 'PQ Session Key Unwrapped' }});
+        await activateStep(3, { duration_ms: 3, data: { 'Action': 'PQ Session Key Unwrapped' } });
         await sleep(200); await completeStep(3);
 
-        await activateStep(4, { duration_ms: 12, data: { 'Action': 'Credential Encryption' }});
+        await activateStep(4, { duration_ms: 12, data: { 'Action': 'Credential Encryption' } });
         await sleep(200); await completeStep(4);
 
         await sleep(200); await completeStep(4);
 
-        await activateStep(5, { duration_ms: 3 , data: { 'Action': 'Client Verification' }});
+        await activateStep(5, { duration_ms: 3, data: { 'Action': 'Client Verification' } });
         await sleep(200); await completeStep(5);
 
         // ── Await Backend Response ────────────────
@@ -265,24 +265,31 @@ async function handleLogin(e) {
         }
 
         // ── Animate OIDC Steps ────────────────
-        await activateStep(6, { duration_ms: 4, data: {
-            'Grant Type': 'authorization_code',
-            'Transport': 'Raw TCP socket (AES-256-GCM)',
-        }});
+        await activateStep(6, {
+            duration_ms: 4, data: {
+                'Grant Type': 'authorization_code',
+                'Transport': 'Raw TCP socket (AES-256-GCM)',
+            }
+        });
         await sleep(400); await completeStep(6);
 
-        await activateStep(7, { duration_ms: 8, data: {
-            'Token Type': 'Bearer',
-            'ID Token Alg': result.sig_algorithm || 'ML-DSA-65',
-            'Transport': 'Raw TCP socket (AES-256-GCM)',
-        }});
+        await activateStep(7, {
+            duration_ms: 8, data: {
+                'Token Type': 'Bearer',
+                'ID Token Alg': result.sig_algorithm || 'ML-DSA-65',
+                'Transport': 'Raw TCP socket (AES-256-GCM)',
+            }
+        });
         await sleep(400); await completeStep(7);
 
-        await activateStep(8, { data: {
-            'Status': 'Authenticated (TCP Bridge)',
-            'KEM': 'ML-KEM-768 (FIPS 203)',
-            'Signature': 'ML-DSA-65 (FIPS 204)',
-        }});
+        await activateStep(8, {
+            data: {
+                'Status': 'Authenticated (TCP Bridge)',
+                'KEM': 'ML-KEM-768 (FIPS 203)',
+                'Handshake Auth': 'Implicit via ML-KEM-768 decapsulation (no signature)',
+                'Token Signing': 'ML-DSA-65 (FIPS 204) — OIDC JWT only, post-handshake',
+            }
+        });
         await sleep(400); await completeStep(8);
 
         // ── Summary ────────────────────────────────────────────────────────
@@ -290,10 +297,11 @@ async function handleLogin(e) {
         document.getElementById('summaryGrid').innerHTML = `
             <div class="summary-item"><div class="summary-label">Protocol</div><div class="summary-value">TCP KEMTLS + OIDC</div></div>
             <div class="summary-item"><div class="summary-label">KEM Algorithm</div><div class="summary-value">ML-KEM-768 (FIPS 203)</div></div>
-            <div class="summary-item"><div class="summary-label">Signature</div><div class="summary-value">ML-DSA-65 (FIPS 204)</div></div>
+            <div class="summary-item"><div class="summary-label">Handshake Auth</div><div class="summary-value">Implicit · ML-KEM-768 decapsulation</div></div>
+            <div class="summary-item"><div class="summary-label">Token Signing</div><div class="summary-value">ML-DSA-65 (FIPS 204) · OIDC JWT</div></div>
             <div class="summary-item"><div class="summary-label">Transport</div><div class="summary-value">Backend TCP Socket</div></div>
             <div class="summary-item"><div class="summary-label">Status</div><div class="summary-value" style="color:#10b981">Secure Session Established</div></div>
-            <div class="summary-item"><div class="summary-label">NIST Level</div><div class="summary-value">Level 3</div></div>
+
         `;
         document.getElementById('flowSummary').classList.add('visible');
 

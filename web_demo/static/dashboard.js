@@ -186,7 +186,7 @@ async function loadInitialData() {
             id: 'test-1',
             type: 'protocol',
             name: 'Basic KEMTLS Handshake',
-            description: 'Tests the complete KEMTLS handshake flow with Kyber768 and Dilithium3',
+            description: 'Tests the complete KEMTLS handshake — signature-less implicit auth via ML-KEM-768 decapsulation',
             status: 'pending',
             config: {
                 kemAlgorithm: 'Kyber768',
@@ -198,7 +198,7 @@ async function loadInitialData() {
             id: 'test-2',
             type: 'security',
             name: 'Signature Verification',
-            description: 'Validates Dilithium3 signature verification in the handshake',
+            description: 'Validates ML-DSA-65 JWT signing for OIDC tokens (post-handshake application layer, not part of KEMTLS handshake)',
             status: 'pending',
             config: {
                 kemAlgorithm: 'Kyber768',
@@ -850,19 +850,19 @@ function formatResultsForUI(results) {
     if (!results || typeof results !== 'object') {
         return `<div style="padding: 1rem; color: var(--text-muted);">${results}</div>`;
     }
-    
+
     let html = '<div class="results-grid" style="display: grid; gap: 0.75rem; padding: 1rem; font-size: 0.85rem;">';
     for (const [key, value] of Object.entries(results)) {
         let displayValue = value;
-        
+
         if (typeof value === 'boolean') {
             displayValue = value ? '<span style="color: #10b981; font-weight: 600;">Yes</span>' : '<span style="color: #ef4444; font-weight: 600;">No</span>';
         } else if (typeof value === 'object' && value !== null) {
             displayValue = `<pre style="margin: 0; padding: 0.5rem; background: rgba(0,0,0,0.1); border-radius: 4px; font-size: 0.75rem; overflow-x: auto; color: var(--text-muted);">${JSON.stringify(value, null, 2)}</pre>`;
         }
-        
+
         const displayKey = key.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
-        
+
         html += `
             <div style="display: grid; grid-template-columns: 140px 1fr; gap: 1rem; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 0.5rem;">
                 <div style="color: var(--text-secondary); font-weight: 500;">${displayKey}</div>
@@ -871,7 +871,7 @@ function formatResultsForUI(results) {
         `;
     }
     html += '</div>';
-    
+
     return html;
 }
 
@@ -929,7 +929,7 @@ async function runPQTLSComparison() {
     btn.disabled = true;
     btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Running…';
     statusBanner.style.display = 'block';
-    statusText.textContent = 'Running 1000 iterations of ML-KEM-768 + ML-DSA-65 (20 warmup)… (~60–90s)';
+    statusText.textContent = 'Running 1000 iterations — ML-KEM-768 (handshake, no signatures) + ML-DSA-65 (OIDC JWT signing only) — (~60–90s)';
     spinner.className = 'fas fa-spinner fa-spin';
     resultsPanel.style.display = 'none';
     emptyState.style.display = 'none';

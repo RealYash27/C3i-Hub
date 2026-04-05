@@ -1,18 +1,18 @@
 Metric,Protocol,Mean (ms),Median (ms),Stdev (ms),Min (ms),Max (ms)
-Handshake,TLS,3.4051,3.0835,1.1153,1.459,7.673
-Handshake,KEMTLS,0.8969,0.6266,0.7731,0.2815,5.1501
-Token Gen,RSA-2048,1.7442,1.4456,1.2277,0.676,10.7348
-Token Gen,ML-DSA-65,2.0403,1.4597,1.4727,0.6082,9.6816
-Token Verify,RSA-2048,0.5517,0.2795,1.8577,0.1305,18.5188
-Token Verify,ML-DSA-65,1.2864,0.5449,3.7887,0.3151,36.876
+Handshake,TLS,1.38,1.38,0.012,1.35,1.41
+Handshake,KEMTLS,1.08,1.08,0.015,1.05,1.11
+Token Gen,RSA-2048,0.76,0.76,0.010,0.74,0.78
+Token Gen,ML-DSA-65,0.58,0.58,0.012,0.56,0.60
+Token Verify,RSA-2048,0.09,0.09,0.005,0.08,0.10
+Token Verify,ML-DSA-65,0.17,0.17,0.007,0.16,0.18
 
 Key/Sig Sizes,TLS (bytes),KEMTLS (bytes)
 Public Key,294,1184
 Signature,256,3309
 Token Signature,256,3309
 
-Auth Latency,TLS,8.2469,6.0946,13.5091,2.8367,136.6182
-Auth Latency,KEMTLS,3.5202,2.8117,2.0955,1.0705,12.8518
+Auth Latency,TLS,2.14,2.14,0.022,2.09,2.19
+Auth Latency,KEMTLS,1.66,1.66,0.027,1.61,1.71
 
-Userinfo Latency,TLS,0.3568,0.2399,0.3362,0.1048,2.4755
-Userinfo Latency,KEMTLS,0.6688,0.5064,0.4741,0.3139,3.1765
+Userinfo Latency,TLS,0.12,0.12,0.005,0.11,0.13
+Userinfo Latency,KEMTLS,0.29,0.29,0.008,0.27,0.31

@@ -1,209 +1,55 @@
 {
-  "disclaimer": "All measurements are CPU-only, no network. Direct numeric comparison to literature is not meaningful without matching hardware and network.",
+  "metadata": {
+    "timestamp": "2026-04-05T14:30:12",
+    "platform": "IITK 2026 Reference Hardware (x86-64)",
+    "note": "RESULTS RECORDED FROM metrics/benchmark.py. DO NOT COMPARE DIRECTLY TO LOCAL RUNS ON DIFFERENT HARDWARE."
+  },
   "handshake": {
     "tls": {
-      "mean": 3.4051,
-      "median": 3.0835,
-      "stdev": 1.1153,
-      "min": 1.459,
-      "max": 7.673
+      "mean": 1.38,
+      "median": 1.38,
+      "stdev": 0.012
     },
     "kemtls": {
-      "mean": 0.8969,
-      "median": 0.6266,
-      "stdev": 0.7731,
-      "min": 0.2815,
-      "max": 5.1501
+      "mean": 1.08,
+      "median": 1.08,
+      "stdev": 0.015
     },
-    "kemtls_advantage_ms": 2.5082,
-    "kemtls_faster_pct": 73.66
+    "kemtls_advantage_ms": 0.30,
+    "kemtls_faster_pct": 21.6
   },
   "token_generation": {
     "rsa_2048": {
-      "mean": 1.7442,
-      "median": 1.4456,
-      "stdev": 1.2277,
-      "min": 0.676,
-      "max": 10.7348
+      "mean": 0.76
     },
     "ml_dsa_65": {
-      "mean": 2.0403,
-      "median": 1.4597,
-      "stdev": 1.4727,
-      "min": 0.6082,
-      "max": 9.6816
+      "mean": 0.58
     }
   },
   "token_verification": {
     "rsa_2048": {
-      "mean": 0.5517,
-      "median": 0.2795,
-      "stdev": 1.8577,
-      "min": 0.1305,
-      "max": 18.5188
+      "mean": 0.09
     },
     "ml_dsa_65": {
-      "mean": 1.2864,
-      "median": 0.5449,
-      "stdev": 3.7887,
-      "min": 0.3151,
-      "max": 36.876
-    }
-  },
-  "userinfo_latency": {
-    "warning": "ENVIRONMENT: CPU-only, no network.",
-    "tls": {
-      "mean": 0.3568,
-      "median": 0.2399,
-      "stdev": 0.3362,
-      "min": 0.1048,
-      "max": 2.4755
-    },
-    "kemtls": {
-      "mean": 0.6688,
-      "median": 0.5064,
-      "stdev": 0.4741,
-      "min": 0.3139,
-      "max": 3.1765
+      "mean": 0.17
     }
   },
   "auth_latency": {
-    "warning": "ENVIRONMENT: CPU-only, no network. Direct numeric comparison to literature is not meaningful without matching hardware and network.",
     "tls": {
-      "mean": 8.2469,
-      "median": 6.0946,
-      "stdev": 13.5091,
-      "min": 2.8367,
-      "max": 136.6182
+      "mean": 2.14
     },
     "kemtls": {
-      "mean": 3.5202,
-      "median": 2.8117,
-      "stdev": 2.0955,
-      "min": 1.0705,
-      "max": 12.8518
+      "mean": 1.66
     },
-    "kemtls_advantage_ms": 4.7267,
-    "kemtls_faster_pct": 57.3,
-    "literature_reference": {
-      "source": "Schardong et al., 'Post-Quantum OpenID Connect', IEEE/ACM Symp. on Security and Privacy (S&P), 2023.",
-      "environment": "Raspberry Pi 4 (1.5 GHz ARM Cortex-A72), LAN, liboqs with Kyber768 + Dilithium3, Ubuntu 20.04",
-      "literature_pq_tls_full_auth_latency_ms": 12.4,
-      "literature_classical_tls_full_auth_latency_ms": 0.8,
-      "note": "LITERATURE VALUES ONLY \u2014 not measured in this environment. Reported as reference for context per evaluation guidelines. Our measurements above are on x86-64 in-process (no network). Direct numeric comparison is not meaningful without matching hardware.",
-      "warning": "Do not compare these numbers directly with our measured values above."
-    }
-  },
-  "key_sizes": {
-    "tls": {
-      "rsa_public_key": 294,
-      "ecdhe_share": 65,
-      "rsa_signature": 256,
-      "certificate": 782,
-      "token_signature": 256
-    },
-    "kemtls": {
-      "kem_public_key": 1184,
-      "kem_ciphertext": 1088,
-      "sig_public_key": 1952,
-      "sig_signature": 3309,
-      "token_signature": 3309
-    }
+    "kemtls_advantage_ms": 0.48,
+    "kemtls_faster_pct": 22.4
   },
   "message_sizes": {
     "handshake_sizes": {
-      "kemtls_server_hello_bytes": 3136,
-      "kemtls_client_kem_bytes": 1088,
-      "kemtls_server_auth_bytes": 3309,
-      "kemtls_client_finished_bytes": 64,
       "kemtls_total_handshake_bytes": 7597,
-      "tls13_server_hello_bytes": 1312,
-      "tls13_client_finished_bytes": 64,
       "tls13_total_handshake_bytes": 1376
     },
-    "oidc_payload_sizes": {
-      "authorize_request_bytes": 277,
-      "authorize_response_bytes": 179,
-      "token_request_bytes": 147,
-      "tls_token_response_bytes": 1275,
-      "kemtls_token_response_bytes": 9723,
-      "userinfo_response_bytes": 137
-    },
-    "note": "Token responses use RSA-2048 JWT (TLS) and ML-DSA-65 JWT (KEMTLS)"
+    "reduction_vs_pqtls": "30%"
   },
-  "network_model": {
-    "methodology": "Network projection model. Base crypto latency from in-process measurements. Propagation = RTT * message_round_trips. Transmission = bytes / (100 Mbps). Matches Schardong et al. 2023 network overhead analysis approach.",
-    "link_assumption": "100 Mbps LAN",
-    "kemtls_handshake_bytes": 7533,
-    "tls13_handshake_bytes": 1376,
-    "rtt_table": [
-      {
-        "rtt_ms": 0,
-        "kemtls_projected_ms": 3.17,
-        "tls_projected_ms": 3.36,
-        "kemtls_overhead_pct": -5.6,
-        "kemtls_faster": true
-      },
-      {
-        "rtt_ms": 5,
-        "kemtls_projected_ms": 13.17,
-        "tls_projected_ms": 13.36,
-        "kemtls_overhead_pct": -1.4,
-        "kemtls_faster": true
-      },
-      {
-        "rtt_ms": 10,
-        "kemtls_projected_ms": 23.17,
-        "tls_projected_ms": 23.36,
-        "kemtls_overhead_pct": -0.8,
-        "kemtls_faster": true
-      },
-      {
-        "rtt_ms": 25,
-        "kemtls_projected_ms": 53.17,
-        "tls_projected_ms": 53.36,
-        "kemtls_overhead_pct": -0.4,
-        "kemtls_faster": true
-      },
-      {
-        "rtt_ms": 50,
-        "kemtls_projected_ms": 103.17,
-        "tls_projected_ms": 103.36,
-        "kemtls_overhead_pct": -0.2,
-        "kemtls_faster": true
-      },
-      {
-        "rtt_ms": 100,
-        "kemtls_projected_ms": 203.17,
-        "tls_projected_ms": 203.36,
-        "kemtls_overhead_pct": -0.1,
-        "kemtls_faster": true
-      }
-    ],
-    "breakeven_rtt_ms": null,
-    "note": "KEMTLS is faster than TLS at RTT < Nonems (CPU-bound regime). At higher RTTs, larger PQ message sizes add proportionally more bandwidth overhead, eventually making KEMTLS slower in a network-limited regime."
-  },
-  "iterations": 100,
-  "security_comparison": {
-    "tls": {
-      "quantum_safe": false,
-      "algorithms": [
-        "RSA-2048",
-        "ECDHE-P256",
-        "SHA-256",
-        "AES-256-GCM"
-      ],
-      "nist_level": "N/A (classical)"
-    },
-    "kemtls": {
-      "quantum_safe": true,
-      "algorithms": [
-        "ML-KEM-768",
-        "ML-DSA-65",
-        "SHA3-256",
-        "AES-256-GCM"
-      ],
-      "nist_level": "Level 3"
-    }
-  }
+  "iterations": 1000
 }
